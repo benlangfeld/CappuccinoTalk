@@ -10,6 +10,10 @@ You will need to symlink or copy the Cappuccino frameworks into Frameworks/ - de
 
 ## Resources
 
-[Source Code](http://github.com/benlangfeld/CappuccinoTalk)
-[Pivotal Tracker Project](http://www.pivotaltracker.com/projects/130059)
-[Wiki](http://github.com/benlangfeld/CappuccinoTalk/wiki)
+* [Source Code](http://github.com/benlangfeld/CappuccinoTalk)
+* [Pivotal Tracker Project](http://www.pivotaltracker.com/projects/130059)
+* [Wiki](http://github.com/benlangfeld/CappuccinoTalk/wiki)
+
+## Contributors
+
+* [Ben Langfeld](http://github.com/benlangfeld) - Maintainer
