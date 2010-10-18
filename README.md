@@ -7,3 +7,9 @@ CappuccinoTalk is a Jabber/XMPP client built using the [Cappuccino](http://cappu
 ## Quick Start
 
 You will need to symlink or copy the Cappuccino frameworks into Frameworks/ - development is currently running off the Cappuccino master branch.
+
+## Resources
+
+[Source Code](http://github.com/benlangfeld/CappuccinoTalk)
+[Pivotal Tracker Project](http://www.pivotaltracker.com/projects/130059)
+[Wiki](http://github.com/benlangfeld/CappuccinoTalk/wiki)
