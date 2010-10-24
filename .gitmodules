@@ -1,0 +1,6 @@
+[submodule "Frameworks/StropheCappuccino"]
+	path = Frameworks/StropheCappuccino
+	url = git://github.com/primalmotion/StropheCappuccino.git
+[submodule "Frameworks/MessageBoard"]
+	path = Frameworks/MessageBoard
+	url = git://github.com/primalmotion/MessageBoard.git
