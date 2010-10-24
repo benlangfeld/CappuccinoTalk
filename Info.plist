@@ -9,6 +9,6 @@
 	<key>CPPrincipalClass</key>
 	<string>CPApplication</string>
 	<key>XMPPBOSHService</key>
-	<string>http://some-bosh-service</string>
+	<string>http://localhost:5280/http-bind</string>
 </dict>
 </plist>
