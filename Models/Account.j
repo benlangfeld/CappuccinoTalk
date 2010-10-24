@@ -50,6 +50,48 @@ ConnectionStatusDisconnected    = @"Disconnected";
     return self;
 }
 
+
+- (BOOL)onStropheConnecting:(id)aConnection
+{
+    CPLog.debug("XMPP: Connecting");
+}
+
+- (BOOL)onStropheAuthenticating:(id)aConnection
+{
+    CPLog.debug("XMPP: Authenticating");
+}
+
+- (BOOL)onStropheAuthFail:(id)aConnection
+{
+    CPLog.warn("XMPP: Authentication Failed");
+}
+
+- (BOOL)onStropheConnected:(id)aConnection
+{
+    CPLog.info("XMPP: Connected");
+    [roster getRoster];
+}
+
+- (BOOL)onStropheConnectFail:(id)aConnection
+{
+    CPLog.warn("XMPP: Connection Failed");
+}
+
+- (BOOL)onStropheDisconnecting:(id)aConnection
+{
+    CPLog.debug("XMPP: Disconnecting");
+}
+
+- (BOOL)onStropheDisconnected:(id)aConnection
+{
+    CPLog.debug("XMPP: Disconnected");
+}
+
+- (BOOL)onStropheError:(id)aConnection
+{
+    CPLog.error("XMPP: Error");
+}
+
 - (CPString)connectionStatus
 {
     if ([self isConnected])
