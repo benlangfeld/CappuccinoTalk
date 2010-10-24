@@ -20,6 +20,8 @@
 
 @import <Foundation/CPObject.j>
 
+@import "Controllers/ManageAccountsController.j"
+
 
 @implementation AppController : CPObject
 {
@@ -36,6 +38,12 @@
     // This is called when the cib is done loading.
     // You can implement this method on any object instantiated from a Cib.
     // It's a useful hook for setting up current UI values, and other things. 
+}
+
+- (@action)manageAccounts:(id)aSender
+{
+    CPLog.debug("Managing accounts!");
+    [[ManageAccountsController sharedController] showWindow:self];
 }
 
 @end

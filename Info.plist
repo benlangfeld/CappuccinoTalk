@@ -8,5 +8,7 @@
 	<string>CappuccinoTalk</string>
 	<key>CPPrincipalClass</key>
 	<string>CPApplication</string>
+	<key>XMPPBOSHService</key>
+	<string>http://some-bosh-service</string>
 </dict>
 </plist>
