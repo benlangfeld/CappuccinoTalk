@@ -46,6 +46,13 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
     if (self = [super initWithWindowCibName:@"Accounts"])
     {
         accounts = [CPArray array];
+        for (var i = 0; i < localStorage.length; i++)
+        {
+            var JID     = localStorage.key(i),
+                object  = localStorage.getObject(JID);
+            console.log(object);
+            [self addAccountWithJID:JID andPassword:object["password"] enabled:object["enabled"]];
+        }
     }
     return self;
 }
@@ -70,10 +77,17 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 
 - (void)addAccountWithJID:(CPString)aJID andPassword:(CPString)aPassword
 {
+    [self addAccountWithJID:aJID andPassword:aPassword enabled:YES];
+}
+
+- (void)addAccountWithJID:(CPString)aJID andPassword:(CPString)aPassword enabled:(BOOL)isEnabled
+{
     CPLog.debug("Adding account with JID " + aJID + " and password " + aPassword);
-    var account = [Account accountWithJID:aJID andPassword:aPassword];
+    var account = [Account accountWithJID:aJID andPassword:aPassword enabled:isEnabled];
     [accounts addObject:account];
     [[CPNotificationCenter defaultCenter] postNotificationName:AccountWasCreatedNotification object:self];
+    if (isEnabled)
+        [account connect];
 }
 
 - (void)deleteAccountWithJID:(CPString)aJID
@@ -85,6 +99,7 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 {
     [anAccount disconnect];
     [accounts removeObject:anAccount];
+    localStorage.removeItem([anAccount JID]);
     [[CPNotificationCenter defaultCenter] postNotificationName:AccountWasDeletedNotification object:self];
 }
 

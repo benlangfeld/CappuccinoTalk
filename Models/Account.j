@@ -33,19 +33,20 @@ ConnectionStatusDisconnected    = @"Disconnected";
     BOOL                enabled     @accessors(property=isEnabled);
 }
 
-+ (Account)accountWithJID:(CPString)aJID andPassword:(CPString)aPassword
++ (Account)accountWithJID:(CPString)aJID andPassword:(CPString)aPassword enabled:(BOOL)isEnabled
 {
-    return [[Account alloc] initWithJID:aJID andPassword:aPassword];
+    return [[Account alloc] initWithJID:aJID andPassword:aPassword enabled:isEnabled];
 }
 
-- (id)initWithJID:(CPString)aJID andPassword:(CPString)aPassword
+- (id)initWithJID:(CPString)aJID andPassword:(CPString)aPassword enabled:(BOOL)isEnabled
 {
     if (self = [super initWithService:BOSHService JID:aJID resource:nil password:aPassword])
     {
-        enabled = YES;
+        enabled = isEnabled;
         roster  = [TNStropheRoster rosterWithConnection:self];
         [self setDelegate:self];
         [roster setDelegate:self];
+        localStorage.setObject([self JID], {"password": [self password], "enabled": true});
     }
     return self;
 }
@@ -103,12 +104,14 @@ ConnectionStatusDisconnected    = @"Disconnected";
 - (void)enable
 {
     enabled = YES;
+    localStorage.setObject([self JID], {"password": [self password], "enabled": true});
 }
 
 - (void)disable
 {
     [self disconnect];
     enabled = NO;
+    localStorage.setObject([self JID], {"password": [self password], "enabled": false});
 }
 
 @end
