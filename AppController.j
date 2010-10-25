@@ -26,25 +26,45 @@
 @implementation AppController : CPObject
 {
     @outlet CPWindow    theWindow; //this "outlet" is connected automatically by the Cib
+    @outlet CPSplitView mainSplitView;
+    @outlet CPButtonBar rosterButtonBar;
 }
 
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification
 {
     // This is called when the application is done loading.
-    [[AccountsController sharedController] showWindow:self];
 }
 
 - (void)awakeFromCib
 {
     // This is called when the cib is done loading.
     // You can implement this method on any object instantiated from a Cib.
-    // It's a useful hook for setting up current UI values, and other things. 
+    // It's a useful hook for setting up current UI values, and other things.
+    [mainSplitView setButtonBar:rosterButtonBar forDividerAtIndex:0];
+    [mainSplitView setPosition:220 ofDividerAtIndex:0];
+
+    var plusButton = [CPButtonBar plusButton],
+        minusButton = [CPButtonBar minusButton],
+        manageAccountsButton = [CPButtonBar minusButton];
+
+    [plusButton setTarget:[AccountsController sharedController]];
+    [plusButton setAction:@selector(promptForNewContact:)];
+    [minusButton setTarget:[AccountsController sharedController]];
+    [minusButton setAction:@selector(removeContact:)];
+    [manageAccountsButton setTarget:[AccountsController sharedController]];
+    [manageAccountsButton setAction:@selector(manageAccounts:)];
+
+    [rosterButtonBar setButtons:[plusButton, minusButton, manageAccountsButton]];
 }
 
-- (@action)manageAccounts:(id)aSender
+- (CGFloat)splitView:(CPSplitView)splitView constrainMinCoordinate:(float)proposedMin ofSubviewAt:(int)dividerIndex
 {
-    CPLog.debug("Managing accounts!");
-    [[ManageAccountsController sharedController] showWindow:self];
+    return 160;
+}
+
+- (CGFloat)splitView:(CPSplitView)splitView constrainMaxCoordinate:(float)proposedMax ofSubviewAt:(int)dividerIndex
+{
+    return 300;
 }
 
 @end

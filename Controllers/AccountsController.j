@@ -28,7 +28,7 @@ AccountWasCreatedNotification   = @"AccountWasCreatedNotification";
 AccountWasEditedNotification    = @"AccountWasEditedNotification";
 AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 
-@implementation AccountsController : CPWindowController
+@implementation AccountsController : CPViewController
 {
             CPArray         accounts    @accessors;
     @outlet CPScrollView    scrollView  @accessors;
@@ -45,7 +45,7 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 
 - (id)init
 {
-    if (self = [super initWithWindowCibName:@"Accounts"])
+    if (self = [super init])
     {
         accounts = [CPArray array];
         for (var i = 0; i < localStorage.length; i++)
@@ -68,6 +68,7 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
     // This is called when the cib is done loading.
     // You can implement this method on any object instantiated from a Cib.
     // It's a useful hook for setting up current UI values, and other things.
+    SharedAccountsController = self;
     [super awakeFromCib];
 
     rosterView = [[CPOutlineView alloc] initWithFrame:[[scrollView contentView] bounds]];
@@ -103,6 +104,12 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 
 #pragma mark -
 #pragma mark Account Management
+
+- (@action)manageAccounts:(id)aSender
+{
+    CPLog.debug("Managing accounts!");
+    [[ManageAccountsController sharedController] showWindow:self];
+}
 
 - (Account)accountWithJID:(CPString)aJID
 {
@@ -148,6 +155,20 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 {
     CPLog.debug("Reloading roster view!");
     [rosterView reloadData];
+}
+
+
+#pragma mark -
+#pragma mark Contact Management
+
+- (@action)promptForNewContact:(id)aSender
+{
+    CPLog.debug("Adding a contact");
+}
+
+- (@action)removeContact:(id)aSender
+{
+    CPLog.debug("Removing a contact");
 }
 
 
