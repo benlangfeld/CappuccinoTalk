@@ -31,6 +31,7 @@
 - (void)applicationDidFinishLaunching:(CPNotification)aNotification
 {
     // This is called when the application is done loading.
+    [[AccountsController sharedController] showWindow:self];
 }
 
 - (void)awakeFromCib

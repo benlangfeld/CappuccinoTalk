@@ -30,7 +30,9 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 
 @implementation AccountsController : CPWindowController
 {
-    CPArray accounts @accessors;
+            CPArray         accounts    @accessors;
+    @outlet CPScrollView    scrollView  @accessors;
+    @outlet CPOutlineView   rosterView  @accessors;
 }
 
 + (AccountsController)sharedController
@@ -52,6 +54,11 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
                 object  = localStorage.getObject(JID);
             [self addAccountWithJID:JID andPassword:object["password"] enabled:object["enabled"]];
         }
+        [[CPNotificationCenter defaultCenter]
+            addObserver:self
+               selector:@selector(reload)
+                   name:TNStropheRosterRetrievedNotification
+                 object:nil];
     }
     return self;
 }
@@ -62,7 +69,40 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
     // You can implement this method on any object instantiated from a Cib.
     // It's a useful hook for setting up current UI values, and other things.
     [super awakeFromCib];
+
+    rosterView = [[CPOutlineView alloc] initWithFrame:[[scrollView contentView] bounds]];
+    [rosterView setBackgroundColor:[CPColor colorWithHexString:@"e0ecfa"]];
+
+    var textColumn = [[CPTableColumn alloc] initWithIdentifier:@"TextColumn"];
+    [textColumn setWidth:200.0];
+    [rosterView setRowHeight:24.0];
+
+    [rosterView setCornerView:nil];
+	[rosterView setHeaderView:nil];
+
+    [rosterView addTableColumn:textColumn];
+    [rosterView setOutlineTableColumn:textColumn];
+
+	[rosterView setDelegate:self];
+	[rosterView setTarget:self];
+
+	[rosterView setDoubleAction:@selector(rosterDidReceiveDoubleClick:)];
+	[rosterView setDataSource:self];
+
+	[rosterView setAllowsMultipleSelection:NO];
+	[rosterView setAllowsEmptySelection:YES];
+
+	[rosterView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
+
+	[rosterView setAllowsColumnResizing:YES];
+	[rosterView setColumnAutoresizingStyle:CPTableViewUniformColumnAutoresizingStyle];
+
+    [scrollView setDocumentView:rosterView];
 }
+
+
+#pragma mark -
+#pragma mark Account Management
 
 - (Account)accountWithJID:(CPString)aJID
 {
@@ -92,6 +132,7 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 - (void)deleteAccountWithJID:(CPString)aJID
 {
     [self deleteAccount:[self accountWithJID:aJID]];
+    [self reload];
 }
 
 - (void)deleteAccount:(Account)anAccount
@@ -100,6 +141,78 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
     [accounts removeObject:anAccount];
     localStorage.removeItem([anAccount JID]);
     [[CPNotificationCenter defaultCenter] postNotificationName:AccountWasDeletedNotification object:self];
+    [self reload];
+}
+
+- (void)reload
+{
+    CPLog.debug("Reloading roster view!");
+    [rosterView reloadData];
+}
+
+
+#pragma mark -
+#pragma mark Outline View Data Source
+
+- (CPDictionary)structure
+{
+    var structure = [CPDictionary dictionary];
+    for (var i = 0; i < [accounts count]; i++)
+    {
+        var account     = [accounts objectAtIndex:i],
+            JID         = [account JID],
+            contacts    = [[account roster] contacts];
+
+        [structure setObject:contacts forKey:JID];
+    }
+    return structure;
+}
+
+- (int)outlineView:(CPOutlineView)anOutlineView numberOfChildrenOfItem:(id)anItem
+{
+    if (!anItem)
+        return [[self structure] count];
+
+    if ([anItem isKindOfClass:[CPDictionary class]] || [anItem isKindOfClass:[CPArray class]])
+        return [anItem count];
+
+    return 0;
+}
+
+- (id)outlineView:(CPOutlineView)anOutlineView child:(int)anIndex ofItem:(id)anItem
+{
+    if (!anItem)
+        anItem = [self structure];
+
+    if ([anItem isKindOfClass:[CPArray class]])
+        return [anItem objectAtIndex:anIndex];
+    else if ([anItem isKindOfClass:[CPDictionary class]])
+        return [anItem objectForKey:[[anItem allKeys] objectAtIndex:anIndex]];
+
+    return;
+}
+
+- (BOOL)outlineView:(CPOutlineView)anOutlineView isItemExpandable:(id)anItem
+{
+    if (([anItem isKindOfClass:[CPArray class]] || [anItem isKindOfClass:[CPDictionary class]]) && [anItem count] > 0)
+        return YES;
+
+    return NO;
+}
+
+- (id)outlineView:(CPOutlineView)anOutlineView objectValueForTableColumn:(CPTableColumn)aTableColumn byItem:(id)anItem
+{
+	if ([anItem isKindOfClass:[CPString class]])
+		return anItem;
+
+	var parentObject = [anOutlineView parentForItem:anItem] ? [anOutlineView parentForItem:anItem] : [self structure];
+	if ([parentObject isKindOfClass:[CPDictionary class]])
+		return [[parentObject allKeysForObject:anItem] objectAtIndex:0];
+
+	else if ([parentObject isKindOfClass:[CPArray class]])
+		return [anItem nickname];
+
+	return;
 }
 
 @end
