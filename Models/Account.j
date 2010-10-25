@@ -46,7 +46,7 @@ ConnectionStatusDisconnected    = @"Disconnected";
         roster  = [TNStropheRoster rosterWithConnection:self];
         [self setDelegate:self];
         [roster setDelegate:self];
-        localStorage.setObject([self JID], {"password": [self password], "enabled": true});
+        localStorage.setObject([self JID], {"password": [self password], "enabled": isEnabled});
     }
     return self;
 }
@@ -105,6 +105,7 @@ ConnectionStatusDisconnected    = @"Disconnected";
 {
     enabled = YES;
     localStorage.setObject([self JID], {"password": [self password], "enabled": true});
+    [self connect];
 }
 
 - (void)disable

@@ -50,7 +50,6 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
         {
             var JID     = localStorage.key(i),
                 object  = localStorage.getObject(JID);
-            console.log(object);
             [self addAccountWithJID:JID andPassword:object["password"] enabled:object["enabled"]];
         }
     }
