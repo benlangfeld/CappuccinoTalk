@@ -79,24 +79,24 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
     [rosterView setRowHeight:24.0];
 
     [rosterView setCornerView:nil];
-	[rosterView setHeaderView:nil];
+    [rosterView setHeaderView:nil];
 
     [rosterView addTableColumn:textColumn];
     [rosterView setOutlineTableColumn:textColumn];
 
-	[rosterView setDelegate:self];
-	[rosterView setTarget:self];
+    [rosterView setDelegate:self];
+    [rosterView setTarget:self];
 
-	[rosterView setDoubleAction:@selector(rosterDidReceiveDoubleClick:)];
-	[rosterView setDataSource:self];
+    [rosterView setDoubleAction:@selector(rosterDidReceiveDoubleClick:)];
+    [rosterView setDataSource:self];
 
-	[rosterView setAllowsMultipleSelection:NO];
-	[rosterView setAllowsEmptySelection:YES];
+    [rosterView setAllowsMultipleSelection:NO];
+    [rosterView setAllowsEmptySelection:YES];
 
-	[rosterView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
+    [rosterView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
 
-	[rosterView setAllowsColumnResizing:YES];
-	[rosterView setColumnAutoresizingStyle:CPTableViewUniformColumnAutoresizingStyle];
+    [rosterView setAllowsColumnResizing:YES];
+    [rosterView setColumnAutoresizingStyle:CPTableViewUniformColumnAutoresizingStyle];
 
     [scrollView setDocumentView:rosterView];
 }
@@ -223,17 +223,17 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 
 - (id)outlineView:(CPOutlineView)anOutlineView objectValueForTableColumn:(CPTableColumn)aTableColumn byItem:(id)anItem
 {
-	if ([anItem isKindOfClass:[CPString class]])
-		return anItem;
+    if ([anItem isKindOfClass:[CPString class]])
+        return anItem;
 
-	var parentObject = [anOutlineView parentForItem:anItem] ? [anOutlineView parentForItem:anItem] : [self structure];
-	if ([parentObject isKindOfClass:[CPDictionary class]])
-		return [[parentObject allKeysForObject:anItem] objectAtIndex:0];
+    var parentObject = [anOutlineView parentForItem:anItem] ? [anOutlineView parentForItem:anItem] : [self structure];
+    if ([parentObject isKindOfClass:[CPDictionary class]])
+        return [[parentObject allKeysForObject:anItem] objectAtIndex:0];
 
-	else if ([parentObject isKindOfClass:[CPArray class]])
-		return [anItem nickname];
+    else if ([parentObject isKindOfClass:[CPArray class]])
+        return [anItem nickname];
 
-	return;
+    return;
 }
 
 @end
