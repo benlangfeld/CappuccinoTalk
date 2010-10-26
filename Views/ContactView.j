@@ -30,17 +30,25 @@
     @outlet     CPTextField     status          @accessors;
 }
 
-- (id)initForContact:(TNStropheContact)aContact
+- (id)initWithFrame:(CGRect)aFrame
 {
-    self = [super initWithFrame:CGRectMake(0,0,200,45)];
+    self = [super initWithFrame:aFrame];
     if (self)
     {
         statusIcon  = [[CPImageView alloc] initWithFrame:CGRectMake(0,0,10,10)];
         nickname    = [CPTextField labelWithTitle:@""];
-        [nickname setObjectValue:[aContact nickname]];
-        [statusIcon setImage:[aContact statusIcon]];
+
+        [self addSubview:statusIcon];
+        [self addSubview:nickname];
     }
     return self;
+}
+
+- (void)setObjectValue:(id)aValue
+{
+    [nickname setObjectValue:[aValue nickname]];
+    [nickname sizeToFit];
+    [statusIcon setImage:[aValue statusIcon]];
 }
 
 - (id)initWithCoder:(CPCoder)aCoder

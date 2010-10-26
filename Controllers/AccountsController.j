@@ -60,6 +60,11 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
                selector:@selector(reload)
                    name:TNStropheRosterRetrievedNotification
                  object:nil];
+        [[CPNotificationCenter defaultCenter]
+            addObserver:self
+               selector:@selector(reload)
+                   name:TNStropheContactPresenceUpdatedNotification
+                 object:nil];
     }
     return self;
 }
@@ -225,16 +230,26 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 - (id)outlineView:(CPOutlineView)anOutlineView objectValueForTableColumn:(CPTableColumn)aTableColumn byItem:(id)anItem
 {
     if ([anItem isKindOfClass:[TNStropheContact class]])
-        return [[ContactView alloc] initForContact:anItem];
+        return anItem;
 
     var parentObject = [anOutlineView parentForItem:anItem] ? [anOutlineView parentForItem:anItem] : [self structure];
     if ([parentObject isKindOfClass:[CPDictionary class]])
         return [[parentObject allKeysForObject:anItem] objectAtIndex:0];
 
     else if ([parentObject isKindOfClass:[CPArray class]])
-        return [[ContactView alloc] initForContact:anItem];
+        return anItem;
 
     return;
+}
+
+
+#pragma mark -
+#pragma mark Outline View Delegate
+
+- (CPView)outlineView:(CPOutlineView)anOutlineView dataViewForTableColumn:(CPTableColumn)aTableColumn item:(id)anItem
+{
+    if ([anItem isKindOfClass:[TNStropheContact class]])
+        return [[ContactView alloc] init];
 }
 
 @end
