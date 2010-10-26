@@ -21,6 +21,7 @@
 @import <AppKit/CPWindowController.j>
 
 @import "../Models/Account.j"
+@import "../Views/ContactView.j"
 
 SharedAccountsController = nil;
 
@@ -76,7 +77,7 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 
     var textColumn = [[CPTableColumn alloc] initWithIdentifier:@"TextColumn"];
     [textColumn setWidth:200.0];
-    [rosterView setRowHeight:24.0];
+    [rosterView setRowHeight:45.0];
 
     [rosterView setCornerView:nil];
     [rosterView setHeaderView:nil];
@@ -223,15 +224,15 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 
 - (id)outlineView:(CPOutlineView)anOutlineView objectValueForTableColumn:(CPTableColumn)aTableColumn byItem:(id)anItem
 {
-    if ([anItem isKindOfClass:[CPString class]])
-        return anItem;
+    if ([anItem isKindOfClass:[TNStropheContact class]])
+        return [[ContactView alloc] initForContact:anItem];
 
     var parentObject = [anOutlineView parentForItem:anItem] ? [anOutlineView parentForItem:anItem] : [self structure];
     if ([parentObject isKindOfClass:[CPDictionary class]])
         return [[parentObject allKeysForObject:anItem] objectAtIndex:0];
 
     else if ([parentObject isKindOfClass:[CPArray class]])
-        return [anItem nickname];
+        return [[ContactView alloc] initForContact:anItem];
 
     return;
 }
