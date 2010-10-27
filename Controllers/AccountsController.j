@@ -21,7 +21,7 @@
 @import <AppKit/CPWindowController.j>
 
 @import "../Models/Account.j"
-@import "../Views/ContactView.j"
+@import "ContactViewController.j"
 
 SharedAccountsController = nil;
 
@@ -249,7 +249,7 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 - (CPView)outlineView:(CPOutlineView)anOutlineView dataViewForTableColumn:(CPTableColumn)aTableColumn item:(id)anItem
 {
     if ([anItem isKindOfClass:[TNStropheContact class]])
-        return [[ContactView alloc] init];
+        return [[[ContactViewController alloc] init] view];
 }
 
 @end

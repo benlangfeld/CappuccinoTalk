@@ -1,5 +1,5 @@
 /*
- * ContactView.j
+ * ContactViewController.j
  * CappuccinoTalk
  *
  * Copyright (C) 2010 Ben Langfeld <ben@langfeld.me>
@@ -18,23 +18,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import <Foundation/Foundation.j>
-@import <AppKit/AppKit.j>
+@import <AppKit/CPViewController.j>
+@import <StropheCappuccino/TNStropheContact.j>
 
-/*! CPView that contains information to display contacts
-*/
-@implementation ContactView : CPView
+@import "../Views/ContactView.j"
+
+@implementation ContactViewController : CPViewController
 {
-    @outlet     CPImageView     statusIcon      @accessors;
-    @outlet     CPTextField     nickname        @accessors;
-    @outlet     CPTextField     status          @accessors;
+    CPColor         bgColor;
+    CPImage         statusIcon;
+    CPString        nickname;
+    CPString        XMPPStatus;
+    CPNumber        numberOfEvents;
 }
 
-- (void)setObjectValue:(id)aValue
+- (id)init
 {
-    [nickname setObjectValue:[aValue nickname]];
-    [nickname sizeToFit];
-    [statusIcon setImage:[aValue statusIcon]];
+    self = [super initWithCibName:@"ContactView" bundle:nil]
+    return self;
+}
+
+- (void)awakeFromCib
+{
+    // This is called when the cib is done loading.
+    // You can implement this method on any object instantiated from a Cib.
+    // It's a useful hook for setting up current UI values, and other things.
+    [super awakeFromCib];
+    [[[self view] statusIcon] setImage:statusIcon];
+    [[[self view] nickname] setObjectValue:nickname];
+    [[[self view] nickname] sizeToFit];
+    [[[self view] status] setObjectValue:status + " (" + numberOfEvents + ")"];
+    [[[self view] status] sizeToFit];
+    [[self view] setBackgroundColor:bgColor];
 }
 
 - (id)initWithCoder:(CPCoder)aCoder
