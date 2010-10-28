@@ -75,6 +75,11 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
                selector:@selector(reload)
                    name:TNStropheContactMessageReceivedNotification
                  object:nil];
+        [[CPNotificationCenter defaultCenter]
+            addObserver:self
+               selector:@selector(expandAccount:)
+                   name:TNStropheRosterRetrievedNotification
+                 object:nil];
     }
     return self;
 }
@@ -171,6 +176,11 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 {
     CPLog.debug("Reloading roster view!");
     [rosterView reloadData];
+}
+
+- (void)expandAccount:(CPNotification)aNotification
+{
+    [rosterView expandItem:[[aNotification object] connection] expandChildren:YES];
 }
 
 
