@@ -44,6 +44,20 @@
     [avatar setImage:[aValue avatar]];
 }
 
+- (BOOL)setThemeState:(CPThemeState)aState
+{
+    [nickname setThemeState:aState];
+    [status setThemeState:aState];
+    return [super setThemeState:aState];
+}
+
+- (BOOL)unsetThemeState:(CPThemeState)aState
+{
+    [nickname unsetThemeState:aState];
+    [status unsetThemeState:aState];
+    return [super unsetThemeState:aState];
+}
+
 - (id)initWithCoder:(CPCoder)aCoder
 {
     self = [super initWithCoder:aCoder];
@@ -54,6 +68,11 @@
         statusIcon  = [aCoder decodeObjectForKey:@"statusIcon"];
         avatar      = [aCoder decodeObjectForKey:@"avatar"];
         status      = [aCoder decodeObjectForKey:@"status"];
+        [nickname setValue:[CPColor whiteColor] forThemeAttribute:@"text-color" inState:CPThemeStateSelectedDataView];
+        [status setValue:[CPColor colorWithRed:51.0 / 255.0 green:51.0 / 255.0 blue:51.0 / 255.0 alpha:1.0] forThemeAttribute:"text-color"];
+        [status setValue:[CPColor whiteColor] forThemeAttribute:@"text-color" inState:CPThemeStateSelectedDataView];
+        [status setLineBreakMode:CPLineBreakByTruncatingTail];
+        [status setValue:[CPFont systemFontOfSize:11.0] forThemeAttribute:@"font"];
     }
 
     return self;
