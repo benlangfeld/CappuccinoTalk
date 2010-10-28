@@ -51,6 +51,10 @@ ConnectionStatusDisconnected    = @"Disconnected";
     return self;
 }
 
+- (CPString)description
+{
+    return [self JID];
+}
 
 - (BOOL)onStropheConnecting:(id)aConnection
 {

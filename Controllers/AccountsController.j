@@ -191,24 +191,16 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 #pragma mark -
 #pragma mark Outline View Data Source
 
-- (CPDictionary)structure
-{
-    var structure = [CPDictionary dictionary];
-    for (var i = 0; i < [accounts count]; i++)
-    {
-        var account = [accounts objectAtIndex:i];
-        [structure setObject:[[account roster] groups] forKey:[account JID]];
-    }
-    return structure;
-}
-
 - (int)outlineView:(CPOutlineView)anOutlineView numberOfChildrenOfItem:(id)anItem
 {
     if (!anItem)
-        return [[self structure] count];
+        return [accounts count];
 
     if ([anItem isKindOfClass:[CPDictionary class]] || [anItem isKindOfClass:[CPArray class]])
         return [anItem count];
+
+    if ([anItem isKindOfClass:[Account class]])
+        return [[[anItem roster] groups] count];
 
     if ([anItem isKindOfClass:[TNStropheGroup class]])
         return [[anItem contacts] count];
@@ -219,7 +211,7 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 - (id)outlineView:(CPOutlineView)anOutlineView child:(int)anIndex ofItem:(id)anItem
 {
     if (!anItem)
-        anItem = [self structure];
+        anItem = accounts;
 
     if ([anItem isKindOfClass:[CPArray class]])
         return [anItem objectAtIndex:anIndex];
@@ -227,6 +219,8 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
         return [anItem objectForKey:[[anItem allKeys] objectAtIndex:anIndex]];
     else if ([anItem isKindOfClass:[TNStropheGroup class]])
         return [[anItem contacts] objectAtIndex:anIndex];
+    else if ([anItem isKindOfClass:[Account class]])
+        return [[[anItem roster] groups] objectAtIndex:anIndex];
 
     return;
 }
@@ -234,6 +228,9 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 - (BOOL)outlineView:(CPOutlineView)anOutlineView isItemExpandable:(id)anItem
 {
     if (([anItem isKindOfClass:[CPArray class]] || [anItem isKindOfClass:[CPDictionary class]]) && [anItem count] > 0)
+        return YES;
+
+    if (([anItem isKindOfClass:[Account class]]) && [[[anItem roster] groups] count] > 0)
         return YES;
 
     if (([anItem isKindOfClass:[TNStropheGroup class]]) && [[anItem contacts] count] > 0)
@@ -244,10 +241,7 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 
 - (id)outlineView:(CPOutlineView)anOutlineView objectValueForTableColumn:(CPTableColumn)aTableColumn byItem:(id)anItem
 {
-    if ([anItem isKindOfClass:[TNStropheContact class]])
-        return anItem;
-
-    if ([anItem isKindOfClass:[TNStropheGroup class]])
+    if ([anItem isKindOfClass:[TNStropheContact class]] || [anItem isKindOfClass:[TNStropheGroup class]] || [anItem isKindOfClass:[Account class]])
         return anItem;
 
     var parentObject = [anOutlineView parentForItem:anItem] ? [anOutlineView parentForItem:anItem] : [self structure];
