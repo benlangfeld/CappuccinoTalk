@@ -23,7 +23,7 @@
 @import "../Models/Account.j"
 @import "ContactViewController.j"
 
-SharedAccountsController = nil;
+var SharedController = nil;
 
 AccountWasCreatedNotification   = @"AccountWasCreatedNotification";
 AccountWasEditedNotification    = @"AccountWasEditedNotification";
@@ -38,10 +38,10 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 
 + (AccountsController)sharedController
 {
-    if (!SharedAccountsController)
-        SharedAccountsController = [[AccountsController alloc] init];
+    if (!SharedController)
+        SharedController = [[AccountsController alloc] init];
 
-    return SharedAccountsController;
+    return SharedController;
 }
 
 - (id)init
@@ -84,7 +84,7 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
     // This is called when the cib is done loading.
     // You can implement this method on any object instantiated from a Cib.
     // It's a useful hook for setting up current UI values, and other things.
-    SharedAccountsController = self;
+    SharedController = self;
     [super awakeFromCib];
 
     rosterView = [[CPOutlineView alloc] initWithFrame:[[scrollView contentView] bounds]];

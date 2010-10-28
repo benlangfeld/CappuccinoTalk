@@ -24,7 +24,7 @@
 @import "NewAccountController.j"
 @import "../Models/Account.j"
 
-SharedManageAccountsController = nil;
+var SharedController = nil;
 
 @implementation ManageAccountsController : CPWindowController
 {
@@ -38,10 +38,10 @@ SharedManageAccountsController = nil;
 
 + (ManageAccountsController)sharedController
 {
-    if (!SharedManageAccountsController)
-        SharedManageAccountsController = [[ManageAccountsController alloc] init];
+    if (!SharedController)
+        SharedController = [[ManageAccountsController alloc] init];
 
-    return SharedManageAccountsController;
+    return SharedController;
 }
 
 - (id)init
