@@ -196,11 +196,8 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
     var structure = [CPDictionary dictionary];
     for (var i = 0; i < [accounts count]; i++)
     {
-        var account     = [accounts objectAtIndex:i],
-            JID         = [account JID],
-            contacts    = [[account roster] contacts];
-
-        [structure setObject:contacts forKey:JID];
+        var account = [accounts objectAtIndex:i];
+        [structure setObject:[[account roster] groups] forKey:[account JID]];
     }
     return structure;
 }
@@ -212,6 +209,9 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 
     if ([anItem isKindOfClass:[CPDictionary class]] || [anItem isKindOfClass:[CPArray class]])
         return [anItem count];
+
+    if ([anItem isKindOfClass:[TNStropheGroup class]])
+        return [[anItem contacts] count];
 
     return 0;
 }
@@ -225,6 +225,8 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
         return [anItem objectAtIndex:anIndex];
     else if ([anItem isKindOfClass:[CPDictionary class]])
         return [anItem objectForKey:[[anItem allKeys] objectAtIndex:anIndex]];
+    else if ([anItem isKindOfClass:[TNStropheGroup class]])
+        return [[anItem contacts] objectAtIndex:anIndex];
 
     return;
 }
@@ -234,12 +236,18 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
     if (([anItem isKindOfClass:[CPArray class]] || [anItem isKindOfClass:[CPDictionary class]]) && [anItem count] > 0)
         return YES;
 
+    if (([anItem isKindOfClass:[TNStropheGroup class]]) && [[anItem contacts] count] > 0)
+        return YES;
+
     return NO;
 }
 
 - (id)outlineView:(CPOutlineView)anOutlineView objectValueForTableColumn:(CPTableColumn)aTableColumn byItem:(id)anItem
 {
     if ([anItem isKindOfClass:[TNStropheContact class]])
+        return anItem;
+
+    if ([anItem isKindOfClass:[TNStropheGroup class]])
         return anItem;
 
     var parentObject = [anOutlineView parentForItem:anItem] ? [anOutlineView parentForItem:anItem] : [self structure];
