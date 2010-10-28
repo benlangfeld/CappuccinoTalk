@@ -22,6 +22,7 @@
 
 @import "../Models/Account.j"
 @import "ContactViewController.j"
+@import "ChatWindowController.j"
 
 var SharedController = nil;
 
@@ -32,6 +33,7 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 @implementation AccountsController : CPViewController
 {
             CPArray         accounts    @accessors;
+            CPDictionary    chatWindows;
     @outlet CPScrollView    scrollView  @accessors;
     @outlet CPOutlineView   rosterView  @accessors;
 }
@@ -48,7 +50,8 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 {
     if (self = [super init])
     {
-        accounts = [CPArray array];
+        accounts    = [CPArray array];
+        chatWindows = [CPDictionary dictionary];
         for (var i = 0; i < localStorage.length; i++)
         {
             var JID     = localStorage.key(i),
@@ -262,6 +265,25 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
         return anItem;
 
     return;
+}
+
+#pragma mark -
+#pragma mark Outline View Target
+
+- (@action)rosterDidReceiveDoubleClick:(id)aSender
+{
+    var contact = [rosterView itemAtRow:[rosterView selectedRow]],
+        chatWindow;
+
+    if ([chatWindows objectForKey:contact])
+        chatWindow = [chatWindows objectForKey:contact];
+    else
+    {
+        chatWindow = [[ChatWindowController alloc] initWithContact:contact];
+        [chatWindows setObject:chatWindow forKey:contact];
+    }
+
+    [chatWindow showWindow:self];
 }
 
 
