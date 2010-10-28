@@ -65,6 +65,16 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
                selector:@selector(reload)
                    name:TNStropheContactPresenceUpdatedNotification
                  object:nil];
+        [[CPNotificationCenter defaultCenter]
+            addObserver:self
+               selector:@selector(reload)
+                   name:TNStropheContactVCardReceivedNotification
+                 object:nil];
+        [[CPNotificationCenter defaultCenter]
+            addObserver:self
+               selector:@selector(reload)
+                   name:TNStropheContactMessageReceivedNotification
+                 object:nil];
     }
     return self;
 }

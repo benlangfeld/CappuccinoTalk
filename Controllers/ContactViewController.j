@@ -25,7 +25,6 @@
 
 @implementation ContactViewController : CPViewController
 {
-    CPColor         bgColor;
     CPImage         statusIcon;
     CPString        nickname;
     CPString        XMPPStatus;
@@ -44,12 +43,6 @@
     // You can implement this method on any object instantiated from a Cib.
     // It's a useful hook for setting up current UI values, and other things.
     [super awakeFromCib];
-    [[[self view] statusIcon] setImage:statusIcon];
-    [[[self view] nickname] setObjectValue:nickname];
-    [[[self view] nickname] sizeToFit];
-    [[[self view] status] setObjectValue:status + " (" + numberOfEvents + ")"];
-    [[[self view] status] sizeToFit];
-    [[self view] setBackgroundColor:bgColor];
 }
 
 - (id)initWithCoder:(CPCoder)aCoder
@@ -60,6 +53,7 @@
     {
         nickname    = [aCoder decodeObjectForKey:@"nickname"];
         statusIcon  = [aCoder decodeObjectForKey:@"statusIcon"];
+        avatar      = [aCoder decodeObjectForKey:@"avatar"];
     }
 
     return self;
@@ -70,6 +64,7 @@
     [super encodeWithCoder:aCoder];
     [aCoder encodeObject:nickname forKey:@"nickname"];
     [aCoder encodeObject:statusIcon forKey:@"statusIcon"];
+    [aCoder encodeObject:avatar forKey:@"avatar"];
 }
 
 @end

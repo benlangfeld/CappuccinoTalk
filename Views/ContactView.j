@@ -28,13 +28,20 @@
     @outlet     CPImageView     statusIcon      @accessors;
     @outlet     CPTextField     nickname        @accessors;
     @outlet     CPTextField     status          @accessors;
+    @outlet     CPImageView     avatar          @accessors;
 }
 
 - (void)setObjectValue:(id)aValue
 {
     [nickname setObjectValue:[aValue nickname]];
     [nickname sizeToFit];
+    var s = [aValue XMPPStatus];
+    if ([aValue numberOfEvents] > 0)
+        s += " (" + [aValue numberOfEvents] + ")";
+    [status setObjectValue:s];
+    [status sizeToFit];
     [statusIcon setImage:[aValue statusIcon]];
+    [avatar setImage:[aValue avatar]];
 }
 
 - (id)initWithCoder:(CPCoder)aCoder
@@ -45,6 +52,8 @@
     {
         nickname    = [aCoder decodeObjectForKey:@"nickname"];
         statusIcon  = [aCoder decodeObjectForKey:@"statusIcon"];
+        avatar      = [aCoder decodeObjectForKey:@"avatar"];
+        status      = [aCoder decodeObjectForKey:@"status"];
     }
 
     return self;
@@ -55,6 +64,8 @@
     [super encodeWithCoder:aCoder];
     [aCoder encodeObject:nickname forKey:@"nickname"];
     [aCoder encodeObject:statusIcon forKey:@"statusIcon"];
+    [aCoder encodeObject:avatar forKey:@"avatar"];
+    [aCoder encodeObject:status forKey:@"status"];
 }
 
 @end
