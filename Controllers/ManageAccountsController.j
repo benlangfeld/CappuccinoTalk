@@ -97,6 +97,7 @@ var SharedController = nil;
     [accountsTable addTableColumn:connectionStatusColumn];
 
     [scrollView setDocumentView:accountsTable];
+    [CPBox boxEnclosingView:scrollView];
 }
 
 - (@action)addAccount:(id)aSender

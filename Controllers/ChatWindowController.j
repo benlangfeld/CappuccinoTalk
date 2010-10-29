@@ -25,7 +25,7 @@
 
 @implementation ChatWindowController : CPWindowController
 {
-    TNStropheContact    contact;
+            TNStropheContact    contact;
     @outlet CPScrollView        scrollView;
             TNMessageBoard      conversationView;
     @outlet CPTextField         messageField;
@@ -37,6 +37,11 @@
     if (self = [super initWithWindowCibName:@"ChatWindow"])
     {
         contact = aContact;
+        [[CPNotificationCenter defaultCenter]
+            addObserver:self
+               selector:@selector(stopListeningForMessages)
+                   name:CPWindowWillCloseNotification
+                 object:[self window]];
     }
     return self;
 }
@@ -47,16 +52,76 @@
     // You can implement this method on any object instantiated from a Cib.
     // It's a useful hook for setting up current UI values, and other things.
     [super awakeFromCib];
-    [[self window] setTitle:[contact nickname]];
-    conversationView = [[TNMessageBoard alloc] initWithFrame:[scrollView bounds]];
 
+    [[self window] setTitle:[contact nickname]];
+    [[self window] setDefaultButton:sendButton];
+
+    [messageField setValue:[CPColor grayColor] forThemeAttribute:"text-color" inState:CPTextFieldStatePlaceholder];
+    [messageField becomeFirstResponder];
+
+    conversationView = [[TNMessageBoard alloc] initWithFrame:[scrollView bounds]];
     [scrollView setDocumentView:conversationView];
+
+    [CPBox boxEnclosingView:scrollView];
+}
+
+- (void)showWindow:(id)aSender
+{
+    [super showWindow:aSender];
+    [self grabAllQueuedMessages];
+    [self startListeningForMessages];
+}
+
+- (void)grabAllQueuedMessages
+{
+    var message;
+    while (message = [contact popMessagesQueue])
+        [self processIncomingMessage:message];
+}
+
+- (void)startListeningForMessages
+{
+    [[CPNotificationCenter defaultCenter]
+        addObserver:self
+           selector:@selector(receiveMessage:)
+               name:TNStropheContactMessageReceivedNotification
+             object:contact];
+}
+
+- (void)stopListeningForMessages
+{
+    [[CPNotificationCenter defaultCenter]
+        removeObserver:self
+                  name:TNStropheContactMessageReceivedNotification
+                object:contact];
 }
 
 - (@action)sendMessage:(id)aSender
 {
-    [contact sendMessage:[messageField objectValue]];
+    var body = [messageField objectValue];
+    [contact sendMessage:body];
     [messageField setObjectValue:nil];
+    [conversationView addMessage:body from:@"me" date:[CPDate date] color:[CPColor redColor]];
+    [self scrollToBottom];
+}
+
+- (void)receiveMessage:(CPNotification)aNotification
+{
+    [self processIncomingMessage:[contact popMessagesQueue]];
+}
+
+- (void)processIncomingMessage:(TNStropheStanza)aMessage
+{
+    [conversationView addMessage:[[aMessage firstChildWithName:@"body"] text] from:[contact nickname] date:[CPDate date] color:[CPColor blueColor]];
+    [self scrollToBottom];
+}
+
+- (void)scrollToBottom
+{
+    // Scroll to the bottom
+    var verticalOffset = [conversationView boundsSize].height - [[scrollView contentView] boundsSize].height;
+    [[scrollView contentView] scrollToPoint:CGPointMake(0,verticalOffset)];
+    [scrollView reflectScrolledClipView:[scrollView contentView]];
 }
 
 @end

@@ -80,6 +80,11 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
                  object:nil];
         [[CPNotificationCenter defaultCenter]
             addObserver:self
+               selector:@selector(reload)
+                   name:TNStropheContactMessageTreatedNotification
+                 object:nil];
+        [[CPNotificationCenter defaultCenter]
+            addObserver:self
                selector:@selector(expandAccount:)
                    name:TNStropheRosterRetrievedNotification
                  object:nil];
