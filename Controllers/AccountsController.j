@@ -155,6 +155,11 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
     [scrollView setDocumentView:rosterView];
 }
 
+- (id)selectedItem
+{
+    return [rosterView itemAtRow:[rosterView selectedRow]];
+}
+
 
 #pragma mark -
 #pragma mark Connections
@@ -169,6 +174,24 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 {
     for (var i = 0; i < [accounts count]; i++)
         [[accounts objectAtIndex:i] disconnect];
+}
+
+- (@action)connectSelectedAccount:(id)aSender
+{
+    var account = [self selectedItem];
+    if (![account isKindOfClass:[Account class]])
+        return;
+
+    [account connect];
+}
+
+- (@action)disconnectSelectedAccount:(id)aSender
+{
+    var account = [self selectedItem];
+    if (![account isKindOfClass:[Account class]])
+        return;
+
+    [account disconnect];
 }
 
 
@@ -318,7 +341,7 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 
 - (@action)rosterDidReceiveDoubleClick:(id)aSender
 {
-    var contact = [rosterView itemAtRow:[rosterView selectedRow]],
+    var contact = [self selectedItem],
         chatWindow;
 
     if ([chatWindows objectForKey:contact])

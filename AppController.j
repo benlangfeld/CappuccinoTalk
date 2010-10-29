@@ -61,6 +61,15 @@
     var disconnectAccountsItem = [[CPMenuItem alloc] initWithTitle:@"Disconnect All Accounts" action:@selector(disconnectAllAccounts:) keyEquivalent:nil];
     [disconnectAccountsItem setTarget:[AccountsController sharedController]];
 
+    var connectSelectedAccountItem = [[CPMenuItem alloc] initWithTitle:@"Connect Selected Account" action:@selector(connectSelectedAccount:) keyEquivalent:nil];
+    [connectSelectedAccountItem setTarget:[AccountsController sharedController]];
+
+    var disconnectSelectedAccountItem = [[CPMenuItem alloc] initWithTitle:@"Disconnect Selected Account" action:@selector(disconnectSelectedAccount:) keyEquivalent:nil];
+    [disconnectSelectedAccountItem setTarget:[AccountsController sharedController]];
+
+    [manageAccountsButton addItem:connectSelectedAccountItem];
+    [manageAccountsButton addItem:disconnectSelectedAccountItem];
+    [manageAccountsButton addItem:[CPMenuItem separatorItem]];
     [manageAccountsButton addItem:connectAccountsItem];
     [manageAccountsButton addItem:disconnectAccountsItem];
     [manageAccountsButton addItem:[CPMenuItem separatorItem]];
