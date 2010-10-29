@@ -80,6 +80,8 @@ ConnectionStatusDisconnected    = @"Disconnected";
 - (BOOL)onStropheConnectFail:(id)aConnection
 {
     CPLog.warn("XMPP: Connection Failed");
+    roster = [TNStropheRoster rosterWithConnection:self];
+    [roster setDelegate:self];
 }
 
 - (BOOL)onStropheDisconnecting:(id)aConnection
@@ -90,11 +92,15 @@ ConnectionStatusDisconnected    = @"Disconnected";
 - (BOOL)onStropheDisconnected:(id)aConnection
 {
     CPLog.debug("XMPP: Disconnected");
+    roster = [TNStropheRoster rosterWithConnection:self];
+    [roster setDelegate:self];
 }
 
 - (BOOL)onStropheError:(id)aConnection
 {
     CPLog.error("XMPP: Error");
+    roster = [TNStropheRoster rosterWithConnection:self];
+    [roster setDelegate:self];
 }
 
 - (CPString)connectionStatus

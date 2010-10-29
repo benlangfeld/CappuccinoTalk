@@ -52,44 +52,69 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
     {
         accounts    = [CPArray array];
         chatWindows = [CPDictionary dictionary];
-        for (var i = 0; i < localStorage.length; i++)
-        {
-            var JID     = localStorage.key(i),
-                object  = localStorage.getObject(JID);
-            [self addAccountWithJID:JID andPassword:object["password"] enabled:object["enabled"]];
-        }
-        [[CPNotificationCenter defaultCenter]
-            addObserver:self
-               selector:@selector(reload)
-                   name:TNStropheRosterRetrievedNotification
-                 object:nil];
-        [[CPNotificationCenter defaultCenter]
-            addObserver:self
-               selector:@selector(reload)
-                   name:TNStropheContactPresenceUpdatedNotification
-                 object:nil];
-        [[CPNotificationCenter defaultCenter]
-            addObserver:self
-               selector:@selector(reload)
-                   name:TNStropheContactVCardReceivedNotification
-                 object:nil];
-        [[CPNotificationCenter defaultCenter]
-            addObserver:self
-               selector:@selector(reload)
-                   name:TNStropheContactMessageReceivedNotification
-                 object:nil];
-        [[CPNotificationCenter defaultCenter]
-            addObserver:self
-               selector:@selector(reload)
-                   name:TNStropheContactMessageTreatedNotification
-                 object:nil];
+        [self listenForReloadNotifications];
         [[CPNotificationCenter defaultCenter]
             addObserver:self
                selector:@selector(expandAccount:)
                    name:TNStropheRosterRetrievedNotification
                  object:nil];
+        [self setupStoredAccounts];
     }
     return self;
+}
+
+- (void)listenForReloadNotifications
+{
+    [[CPNotificationCenter defaultCenter]
+        addObserver:self
+           selector:@selector(reload)
+               name:TNStropheRosterRetrievedNotification
+             object:nil];
+    [[CPNotificationCenter defaultCenter]
+        addObserver:self
+           selector:@selector(reload)
+               name:TNStropheConnectionStatusDisconnected
+             object:nil];
+    [[CPNotificationCenter defaultCenter]
+        addObserver:self
+           selector:@selector(reload)
+               name:TNStropheConnectionStatusConnectionFailure
+             object:nil];
+    [[CPNotificationCenter defaultCenter]
+        addObserver:self
+           selector:@selector(reload)
+               name:TNStropheConnectionStatusError
+             object:nil];
+    [[CPNotificationCenter defaultCenter]
+        addObserver:self
+           selector:@selector(reload)
+               name:TNStropheContactPresenceUpdatedNotification
+             object:nil];
+    [[CPNotificationCenter defaultCenter]
+        addObserver:self
+           selector:@selector(reload)
+               name:TNStropheContactVCardReceivedNotification
+             object:nil];
+    [[CPNotificationCenter defaultCenter]
+        addObserver:self
+           selector:@selector(reload)
+               name:TNStropheContactMessageReceivedNotification
+             object:nil];
+    [[CPNotificationCenter defaultCenter]
+        addObserver:self
+           selector:@selector(reload)
+               name:TNStropheContactMessageTreatedNotification
+             object:nil];
+}
+
+- (void)setupStoredAccounts
+{
+    for (var i = 0; i < localStorage.length; i++)
+    {
+        var JID     = localStorage.key(i),
+            object  = localStorage.getObject(JID);
+        [self addAccountWithJID:JID andPassword:object["password"] enabled:object["enabled"]];
+    }
 }
 
 - (void)awakeFromCib
