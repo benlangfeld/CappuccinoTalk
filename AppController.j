@@ -45,14 +45,26 @@
 
     var plusButton = [CPButtonBar plusButton],
         minusButton = [CPButtonBar minusButton],
-        manageAccountsButton = [CPButtonBar minusButton];
+        manageAccountsButton = [CPButtonBar actionPopupButton];
 
     [plusButton setTarget:[AccountsController sharedController]];
     [plusButton setAction:@selector(promptForNewContact:)];
     [minusButton setTarget:[AccountsController sharedController]];
     [minusButton setAction:@selector(removeContact:)];
-    [manageAccountsButton setTarget:[AccountsController sharedController]];
-    [manageAccountsButton setAction:@selector(manageAccounts:)];
+
+    var manageAccountsItem = [[CPMenuItem alloc] initWithTitle:@"Manage Accounts" action:@selector(manageAccounts:) keyEquivalent:nil];
+    [manageAccountsItem setTarget:[AccountsController sharedController]];
+
+    var connectAccountsItem = [[CPMenuItem alloc] initWithTitle:@"Connect All Accounts" action:@selector(connectAllAccounts:) keyEquivalent:nil];
+    [connectAccountsItem setTarget:[AccountsController sharedController]];
+
+    var disconnectAccountsItem = [[CPMenuItem alloc] initWithTitle:@"Disconnect All Accounts" action:@selector(disconnectAllAccounts:) keyEquivalent:nil];
+    [disconnectAccountsItem setTarget:[AccountsController sharedController]];
+
+    [manageAccountsButton addItem:connectAccountsItem];
+    [manageAccountsButton addItem:disconnectAccountsItem];
+    [manageAccountsButton addItem:[CPMenuItem separatorItem]];
+    [manageAccountsButton addItem:manageAccountsItem];
 
     [rosterButtonBar setButtons:[plusButton, minusButton, manageAccountsButton]];
 }

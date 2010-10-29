@@ -157,6 +157,22 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 
 
 #pragma mark -
+#pragma mark Connections
+
+- (@action)connectAllAccounts:(id)aSender
+{
+    for (var i = 0; i < [accounts count]; i++)
+        [[accounts objectAtIndex:i] connect];
+}
+
+- (@action)disconnectAllAccounts:(id)aSender
+{
+    for (var i = 0; i < [accounts count]; i++)
+        [[accounts objectAtIndex:i] disconnect];
+}
+
+
+#pragma mark -
 #pragma mark Account Management
 
 - (@action)manageAccounts:(id)aSender
