@@ -65,7 +65,26 @@ task ("debug", function()
 task ("release", function()
 {
     ENV["CONFIGURATION"] = "Release";
+
+    // Build StropheCappuccino
+    JAKE.subjake(["Frameworks/StropheCappuccino"], "build", ENV);
+    OS.system(["mv", "Frameworks/StropheCappuccino", "Frameworks/StropheCappuccinoOld"]);
+    OS.system(["mv", FILE.join("Frameworks", "StropheCappuccinoOld", "Build", ENV["CONFIGURATION"], "StropheCappuccino"), "Frameworks/"]);
+    OS.system(["rm", "-rf", "Frameworks/StropheCappuccinoOld"]);
+
+    // Build MessageBoard
+    JAKE.subjake(["Frameworks/MessageBoard"], "build", ENV);
+    OS.system(["mv", "Frameworks/MessageBoard", "Frameworks/MessageBoardOld"]);
+    OS.system(["mv", FILE.join("Frameworks", "MessageBoardOld", "Build", ENV["CONFIGURATION"], "MessageBoard"), "Frameworks/"]);
+    OS.system(["rm", "-rf", "Frameworks/MessageBoardOld"]);
+
     JAKE.subjake(["."], "build", ENV);
+
+    OS.system(["rm", "-rf", "Frameworks/MessageBoard"]);
+    OS.system(["rm", "-rf", "Frameworks/StropheCappuccino"]);
+
+    OS.system("git submodule init");
+    OS.system("git submodule update");
 });
 
 task ("run", ["debug"], function()
