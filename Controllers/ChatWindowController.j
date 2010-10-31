@@ -19,6 +19,8 @@
  */
 
 @import <AppKit/CPWindowController.j>
+@import <AppKit/CPScrollView.j>
+@import <Foundation/CPDate.j>
 @import <MessageBoard/MessageBoard.j>
 
 @import "../Models/Account.j"

@@ -18,7 +18,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import <AppKit/CPWindowController.j>
+@import <AppKit/CPViewController.j>
+@import <AppKit/CPScrollView.j>
 
 @import "../Models/Account.j"
 @import "ContactViewController.j"

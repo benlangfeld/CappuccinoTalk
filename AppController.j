@@ -19,6 +19,7 @@
  */
 
 @import <Foundation/CPObject.j>
+@import <Foundation/CPTimer.j>
 
 @import "Controllers/ManageAccountsController.j"
 

@@ -19,6 +19,7 @@
  */
 
 @import <AppKit/CPWindowController.j>
+@import <AppKit/CPScrollView.j>
 
 @import "AccountsController.j"
 @import "NewAccountController.j"
