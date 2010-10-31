@@ -4,3 +4,5 @@ Frameworks/Objective-J
 Frameworks/Debug/AppKit
 Frameworks/Debug/Foundation
 Frameworks/Debug/Objective-J
+
+Build/**/*
