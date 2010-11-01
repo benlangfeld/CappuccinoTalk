@@ -34,7 +34,9 @@
 {
     [nickname setObjectValue:[aValue nickname]];
     [nickname sizeToFit];
-    var s = [aValue XMPPStatus];
+    var s = @"";
+    if ([aValue XMPPStatus])
+        s += [aValue XMPPStatus];
     if ([aValue numberOfEvents] > 0)
         s += " (" + [aValue numberOfEvents] + ")";
     [status setObjectValue:s];
