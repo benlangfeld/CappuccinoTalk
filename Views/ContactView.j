@@ -33,7 +33,10 @@
 - (void)setObjectValue:(id)aValue
 {
     [nickname setObjectValue:[aValue nickname]];
+    var oldNicknameBounds = [nickname boundsSize];
     [nickname sizeToFit];
+    [self setFrameSize:CGSizeMake([self boundsSize].x + [nickname bounds].x - oldNicknameBounds.x, [self boundsSize].y)];
+
     var s = @"";
     if ([aValue XMPPStatus])
         s += [aValue XMPPStatus];
