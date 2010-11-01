@@ -75,6 +75,7 @@ var SharedController = nil;
     // You can implement this method on any object instantiated from a Cib.
     // It's a useful hook for setting up current UI values, and other things.
     [super awakeFromCib];
+    [[self window] setFrameOrigin:CGPointMake(310,50)];
     [editAccountButton setEnabled:NO];
     [deleteAccountButton setEnabled:NO];
 
