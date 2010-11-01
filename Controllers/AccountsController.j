@@ -342,18 +342,23 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 
 - (@action)rosterDidReceiveDoubleClick:(id)aSender
 {
-    var contact = [self selectedItem],
-        chatWindow;
-
-    if ([chatWindows objectForKey:contact])
-        chatWindow = [chatWindows objectForKey:contact];
-    else
+    if ([[self selectedItem] isKindOfClass:[TNStropheContact class]])
     {
-        chatWindow = [[ChatWindowController alloc] initWithContact:contact];
-        [chatWindows setObject:chatWindow forKey:contact];
-    }
+        var contact = [self selectedItem],
+            chatWindow;
 
-    [chatWindow showWindow:self];
+        if ([chatWindows objectForKey:contact])
+            chatWindow = [chatWindows objectForKey:contact];
+        else
+        {
+            chatWindow = [[ChatWindowController alloc] initWithContact:contact];
+            [chatWindows setObject:chatWindow forKey:contact];
+        }
+
+        [chatWindow showWindow:self];
+    }
+    else if ([[self selectedItem] isKindOfClass:[Account class]])
+        [[[self selectedItem] setStatusController] showWindow:self];
 }
 
 

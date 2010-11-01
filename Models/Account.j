@@ -21,6 +21,8 @@
 @import <AppKit/CPWindowController.j>
 @import <StropheCappuccino/StropheCappuccino.j>
 
+@import "../Controllers/SetStatusController.j"
+
 BOSHService = [[CPBundle mainBundle] objectForInfoDictionaryKey:@"XMPPBOSHService"];
 
 ConnectionStatusConnected       = @"Connected";
@@ -29,8 +31,10 @@ ConnectionStatusDisconnected    = @"Disconnected";
 
 @implementation Account : TNStropheConnection
 {
-    TNStropheRoster     roster      @accessors;
-    BOOL                enabled     @accessors(property=isEnabled);
+    TNStropheRoster     roster                  @accessors;
+    BOOL                enabled                 @accessors(property=isEnabled);
+
+    CPWindowController  setStatusController;
     CPWindowController  editAccountController;
 }
 
@@ -151,6 +155,26 @@ ConnectionStatusDisconnected    = @"Disconnected";
            selector:@selector(connect)
                name:TNStropheConnectionStatusDisconnected
              object:nil];
+}
+
+- (SetStatusController)setStatusController
+{
+    if (!setStatusController)
+        setStatusController = [[SetStatusController alloc] initWithAccount:self];
+
+    return setStatusController;
+}
+
+- (void)setStatus:(CPString)aStatus ofType:(CPString)aType
+{
+    var stanza = [TNStropheStanza presence];
+    [stanza addChildWithName:@"show"];
+    [stanza addTextNode:aType];
+    [stanza up];
+    [stanza up];
+    [stanza addChildWithName:@"status"];
+    [stanza addTextNode:aStatus];
+    [self send:stanza];
 }
 
 @end
