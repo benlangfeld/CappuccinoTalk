@@ -23,6 +23,7 @@
 
 @import "AccountsController.j"
 @import "NewAccountController.j"
+@import "EditAccountController.j"
 @import "../Models/Account.j"
 
 var SharedController = nil;
@@ -82,6 +83,7 @@ var SharedController = nil;
     accountsTable = [[CPTableView alloc] initWithFrame:[scrollView bounds]];
     [accountsTable setDataSource:self];
     [accountsTable setDelegate:self];
+    [accountsTable setDoubleAction:@selector(doubleClickedRow:)];
     [accountsTable setUsesAlternatingRowBackgroundColors:YES];
 
     var stateColumn = [[CPTableColumn alloc] initWithIdentifier:@"accountState"];
@@ -90,7 +92,7 @@ var SharedController = nil;
 
     var jidColumn = [[CPTableColumn alloc] initWithIdentifier:@"JID"];
     [[jidColumn headerView] setStringValue:@"JID"];
-    [jidColumn setWidth:110.0];
+    [jidColumn setWidth:200.0];
     [accountsTable addTableColumn:jidColumn];
 
     var connectionStatusColumn = [[CPTableColumn alloc] initWithIdentifier:@"connectionStatus"];
@@ -116,7 +118,8 @@ var SharedController = nil;
 - (@action)editAccount:(id)aSender
 {
     CPLog.debug("Editing an account!");
-    var account = [self selectedAccount];
+    var controller = [[EditAccountController alloc] initWithAccount:[self selectedAccount]];
+    [controller showWindow:aSender];
 }
 
 - (@action)deleteAccount:(id)aSender
@@ -194,6 +197,11 @@ var SharedController = nil;
 
     [editAccountButton setEnabled:answer];
     [deleteAccountButton setEnabled:answer];
+}
+
+- (void)doubleClickedRow:(CPTableView)aTableView
+{
+    [[[self selectedAccount] editAccountController] showWindow:self];
 }
 
 @end

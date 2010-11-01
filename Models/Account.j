@@ -31,6 +31,7 @@ ConnectionStatusDisconnected    = @"Disconnected";
 {
     TNStropheRoster     roster      @accessors;
     BOOL                enabled     @accessors(property=isEnabled);
+    CPWindowController  editAccountController;
 }
 
 + (Account)accountWithJID:(CPString)aJID andPassword:(CPString)aPassword enabled:(BOOL)isEnabled
@@ -46,9 +47,14 @@ ConnectionStatusDisconnected    = @"Disconnected";
         roster  = [TNStropheRoster rosterWithConnection:self];
         [self setDelegate:self];
         [roster setDelegate:self];
-        localStorage.setObject([self JID], {"password": [self password], "enabled": isEnabled});
+        [self store];
     }
     return self;
+}
+
+- (void)store
+{
+    localStorage.setObject([self JID], {"password": [self password], "enabled": enabled});
 }
 
 - (CPString)description
@@ -74,6 +80,10 @@ ConnectionStatusDisconnected    = @"Disconnected";
 - (BOOL)onStropheConnected:(id)aConnection
 {
     CPLog.info("XMPP: Connected");
+    [[CPNotificationCenter defaultCenter]
+        removeObserver:self
+                  name:TNStropheConnectionStatusDisconnected
+                object:nil];
     [roster getRoster];
 }
 
@@ -120,6 +130,27 @@ ConnectionStatusDisconnected    = @"Disconnected";
     [self disconnect];
     enabled = NO;
     localStorage.setObject([self JID], {"password": [self password], "enabled": false});
+}
+
+- (EditAccountController)editAccountController
+{
+    if (!editAccountController)
+        editAccountController = [[EditAccountController alloc] initWithAccount:self];
+
+    return editAccountController;
+}
+
+- (void)editWithJID:(CPString)aJID andPassword:(CPString)aPassword changeRegistration:(BOOL)changeRegistration
+{
+    [self disconnect];
+    [self setJID:aJID];
+    [self setPassword:aPassword];
+    [self store];
+    [[CPNotificationCenter defaultCenter]
+        addObserver:self
+           selector:@selector(connect)
+               name:TNStropheConnectionStatusDisconnected
+             object:nil];
 }
 
 @end
