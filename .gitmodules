@@ -1,0 +1,9 @@
+[submodule "Libraries/StropheCappuccino"]
+	path = Libraries/StropheCappuccino
+	url = git://github.com/primalmotion/StropheCappuccino.git
+[submodule "Libraries/MessageBoard"]
+	path = Libraries/MessageBoard
+	url = git://github.com/primalmotion/MessageBoard.git
+[submodule "Libraries/GrowlCappuccino"]
+	path = Libraries/GrowlCappuccino
+	url = git://github.com/primalmotion/GrowlCappuccino.git

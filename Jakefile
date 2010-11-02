@@ -38,7 +38,7 @@ app ("CappuccinoTalk", function(task)
     task.setAuthor("MyStudioTools");
     task.setEmail("info @nospam@ mystudiotools.com");
     task.setSummary("CappuccinoTalk");
-    task.setSources((new FileList("**/*.j")).exclude(FILE.join("Build", "**")));
+    task.setSources((new FileList("**/*.j")).exclude(FILE.join("Build", "**")).exclude(FILE.join("Libraries", "**")));
     task.setResources(new FileList("Resources/**"));
     task.setIndexFilePath("index.html");
     task.setInfoPlistPath("Info.plist");
@@ -59,6 +59,12 @@ task ("build", ["default"]);
 task ("debug", function()
 {
     ENV["CONFIGURATION"] = "Debug";
+
+    // Build Libraries
+    JAKE.subjake(["Libraries/StropheCappuccino"], "build", ENV);
+    JAKE.subjake(["Libraries/GrowlCappuccino"], "build", ENV);
+    JAKE.subjake(["Libraries/MessageBoard"], "build", ENV);
+
     JAKE.subjake(["."], "build", ENV);
 });
 
@@ -66,25 +72,12 @@ task ("release", function()
 {
     ENV["CONFIGURATION"] = "Release";
 
-    // Build StropheCappuccino
-    JAKE.subjake(["Frameworks/StropheCappuccino"], "build", ENV);
-    OS.system(["mv", "Frameworks/StropheCappuccino", "Frameworks/StropheCappuccinoOld"]);
-    OS.system(["mv", FILE.join("Frameworks", "StropheCappuccinoOld", "Build", ENV["CONFIGURATION"], "StropheCappuccino"), "Frameworks/"]);
-    OS.system(["rm", "-rf", "Frameworks/StropheCappuccinoOld"]);
-
-    // Build MessageBoard
-    JAKE.subjake(["Frameworks/MessageBoard"], "build", ENV);
-    OS.system(["mv", "Frameworks/MessageBoard", "Frameworks/MessageBoardOld"]);
-    OS.system(["mv", FILE.join("Frameworks", "MessageBoardOld", "Build", ENV["CONFIGURATION"], "MessageBoard"), "Frameworks/"]);
-    OS.system(["rm", "-rf", "Frameworks/MessageBoardOld"]);
+    // Build Libraries
+    JAKE.subjake(["Libraries/StropheCappuccino"], "build", ENV);
+    JAKE.subjake(["Libraries/GrowlCappuccino"], "build", ENV);
+    JAKE.subjake(["Libraries/MessageBoard"], "build", ENV);
 
     JAKE.subjake(["."], "build", ENV);
-
-    OS.system(["rm", "-rf", "Frameworks/MessageBoard"]);
-    OS.system(["rm", "-rf", "Frameworks/StropheCappuccino"]);
-
-    OS.system("git submodule init");
-    OS.system("git submodule update");
 });
 
 task ("run", ["debug"], function()
