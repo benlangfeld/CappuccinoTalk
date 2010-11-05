@@ -27,10 +27,6 @@
 
 var SharedController = nil;
 
-AccountWasCreatedNotification   = @"AccountWasCreatedNotification";
-AccountWasEditedNotification    = @"AccountWasEditedNotification";
-AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
-
 @implementation AccountsController : CPViewController
 {
             CPArray         accounts    @accessors;
@@ -58,6 +54,21 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
             addObserver:self
                selector:@selector(expandAccount:)
                    name:TNStropheRosterRetrievedNotification
+                 object:nil];
+        [[CPNotificationCenter defaultCenter]
+            addObserver:self
+               selector:@selector(storeAccounts)
+                  name:AccountWasAddedNotification
+                object:nil];
+        [[CPNotificationCenter defaultCenter]
+            addObserver:self
+               selector:@selector(storeAccounts)
+                  name:AccountWasEditedNotification
+                object:nil];
+        [[CPNotificationCenter defaultCenter]
+            addObserver:self
+               selector:@selector(storeAccounts)
+                   name:AccountWasDeletedNotification
                  object:nil];
         [self setupStoredAccounts];
     }
@@ -110,12 +121,31 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 
 - (void)setupStoredAccounts
 {
-    for (var i = 0; i < localStorage.length; i++)
+    var storedAccounts = [[CPUserDefaults standardUserDefaults] objectForKey:@"accounts"];
+    for (var i = 0; i < [storedAccounts count]; i++)
     {
-        var JID     = localStorage.key(i),
-            object  = localStorage.getObject(JID);
-        [self addAccountWithJID:JID andPassword:object["password"] enabled:object["enabled"]];
+        var account = [storedAccounts objectAtIndex:i];
+        [self addAccountWithJID:[account valueForKey:@"jid"] andPassword:[account valueForKey:@"password"] enabled:[account valueForKey:@"enabled"]];
     }
+}
+
+- (CPArray)accountCredentials
+{
+    var credentials = [CPArray array];
+    for (var i = 0; i < [accounts count]; i++)
+    {
+        var account = [accounts objectAtIndex:i],
+            creds   = [CPDictionary dictionaryWithObjectsAndKeys:[account JID], @"jid",
+                                                                 [account password], @"password",
+                                                                 [account isEnabled], @"enabled"];
+        [credentials addObject:creds];
+    }
+    return credentials;
+}
+
+- (void)storeAccounts
+{
+    [[CPUserDefaults standardUserDefaults] setObject:[self accountCredentials] forKey:@"accounts"];
 }
 
 - (void)awakeFromCib
@@ -223,11 +253,15 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 - (void)addAccountWithJID:(CPString)aJID andPassword:(CPString)aPassword enabled:(BOOL)isEnabled
 {
     CPLog.debug("Adding account with JID " + aJID + " and password " + aPassword);
-    var account = [Account accountWithJID:aJID andPassword:aPassword enabled:isEnabled];
-    [accounts addObject:account];
-    [[CPNotificationCenter defaultCenter] postNotificationName:AccountWasCreatedNotification object:self];
-    if (isEnabled)
-        [account connect];
+    [self addAccount:[Account accountWithJID:aJID andPassword:aPassword enabled:isEnabled]];
+}
+
+- (void)addAccount:(Account)anAccount
+{
+    [accounts addObject:anAccount];
+    [[CPNotificationCenter defaultCenter] postNotificationName:AccountWasAddedNotification object:self];
+    if ([anAccount isEnabled])
+        [anAccount connect];
 }
 
 - (void)deleteAccountWithJID:(CPString)aJID
@@ -240,7 +274,6 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 {
     [anAccount disconnect];
     [accounts removeObject:anAccount];
-    localStorage.removeItem([anAccount JID]);
     [[CPNotificationCenter defaultCenter] postNotificationName:AccountWasDeletedNotification object:self];
     [self reload];
 }

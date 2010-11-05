@@ -54,7 +54,7 @@ var SharedController = nil;
         [[CPNotificationCenter defaultCenter]
             addObserver:self
                selector:@selector(accountsWereUpdated:)
-                   name:AccountWasCreatedNotification
+                   name:AccountWasAddedNotification
                  object:nil];
         [[CPNotificationCenter defaultCenter]
             addObserver:self

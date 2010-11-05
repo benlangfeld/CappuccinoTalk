@@ -29,6 +29,11 @@ ConnectionStatusConnected       = @"Connected";
 ConnectionStatusConnecting      = @"Connecting";
 ConnectionStatusDisconnected    = @"Disconnected";
 
+AccountWasCreatedNotification   = @"AccountWasCreatedNotification";
+AccountWasAddedNotification     = @"AccountWasAddedNotification";
+AccountWasEditedNotification    = @"AccountWasEditedNotification";
+AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
+
 @implementation Account : TNStropheConnection
 {
     TNStropheRoster     roster                  @accessors;
@@ -51,14 +56,9 @@ ConnectionStatusDisconnected    = @"Disconnected";
         roster  = [TNStropheRoster rosterWithConnection:self];
         [self setDelegate:self];
         [roster setDelegate:self];
-        [self store];
+        [[CPNotificationCenter defaultCenter] postNotificationName:AccountWasCreatedNotification object:self];
     }
     return self;
-}
-
-- (void)store
-{
-    localStorage.setObject([self JID], {"password": [self password], "enabled": enabled});
 }
 
 - (CPString)description
@@ -125,7 +125,7 @@ ConnectionStatusDisconnected    = @"Disconnected";
 - (void)enable
 {
     enabled = YES;
-    localStorage.setObject([self JID], {"password": [self password], "enabled": true});
+    [[CPNotificationCenter defaultCenter] postNotificationName:AccountWasEditedNotification object:self];
     [self connect];
 }
 
@@ -133,7 +133,7 @@ ConnectionStatusDisconnected    = @"Disconnected";
 {
     [self disconnect];
     enabled = NO;
-    localStorage.setObject([self JID], {"password": [self password], "enabled": false});
+    [[CPNotificationCenter defaultCenter] postNotificationName:AccountWasEditedNotification object:self];
 }
 
 - (EditAccountController)editAccountController
@@ -149,7 +149,7 @@ ConnectionStatusDisconnected    = @"Disconnected";
     [self disconnect];
     [self setJID:aJID];
     [self setPassword:aPassword];
-    [self store];
+    [[CPNotificationCenter defaultCenter] postNotificationName:AccountWasEditedNotification object:self];
     [[CPNotificationCenter defaultCenter]
         addObserver:self
            selector:@selector(connect)
