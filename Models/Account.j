@@ -23,7 +23,7 @@
 
 @import "../Controllers/SetStatusController.j"
 
-BOSHService = [[CPBundle mainBundle] objectForInfoDictionaryKey:@"XMPPBOSHService"];
+var BOSHService = [[CPBundle mainBundle] objectForInfoDictionaryKey:@"XMPPBOSHService"];
 
 ConnectionStatusConnected       = @"Connected";
 ConnectionStatusConnecting      = @"Connecting";
