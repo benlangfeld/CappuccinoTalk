@@ -66,6 +66,11 @@ var SharedController = nil;
                selector:@selector(accountsWereUpdated:)
                    name:AccountWasDeletedNotification
                  object:nil];
+        [[CPNotificationCenter defaultCenter]
+            addObserver:self
+               selector:@selector(accountsWereUpdated:)
+                   name:AccountConnectionStatusDidChangeNotification
+                 object:nil];
     }
     return self;
 }

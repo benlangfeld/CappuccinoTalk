@@ -29,10 +29,11 @@ ConnectionStatusConnected       = @"Connected";
 ConnectionStatusConnecting      = @"Connecting";
 ConnectionStatusDisconnected    = @"Disconnected";
 
-AccountWasCreatedNotification   = @"AccountWasCreatedNotification";
-AccountWasAddedNotification     = @"AccountWasAddedNotification";
-AccountWasEditedNotification    = @"AccountWasEditedNotification";
-AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
+AccountWasCreatedNotification                   = @"AccountWasCreatedNotification";
+AccountWasAddedNotification                     = @"AccountWasAddedNotification";
+AccountWasEditedNotification                    = @"AccountWasEditedNotification";
+AccountWasDeletedNotification                   = @"AccountWasDeletedNotification";
+AccountConnectionStatusDidChangeNotification    = @"AccountConnectionStatusDidChangeNotification";
 
 @implementation Account : TNStropheConnection
 {
@@ -69,16 +70,19 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 - (BOOL)onStropheConnecting:(id)aConnection
 {
     CPLog.debug("XMPP: Connecting");
+    [[CPNotificationCenter defaultCenter] postNotificationName:AccountConnectionStatusDidChangeNotification object:self];
 }
 
 - (BOOL)onStropheAuthenticating:(id)aConnection
 {
     CPLog.debug("XMPP: Authenticating");
+    [[CPNotificationCenter defaultCenter] postNotificationName:AccountConnectionStatusDidChangeNotification object:self];
 }
 
 - (BOOL)onStropheAuthFail:(id)aConnection
 {
     CPLog.warn("XMPP: Authentication Failed");
+    [[CPNotificationCenter defaultCenter] postNotificationName:AccountConnectionStatusDidChangeNotification object:self];
 }
 
 - (BOOL)onStropheConnected:(id)aConnection
@@ -89,29 +93,34 @@ AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
                   name:TNStropheConnectionStatusDisconnected
                 object:nil];
     [roster getRoster];
+    [[CPNotificationCenter defaultCenter] postNotificationName:AccountConnectionStatusDidChangeNotification object:self];
 }
 
 - (BOOL)onStropheConnectFail:(id)aConnection
 {
     CPLog.warn("XMPP: Connection Failed");
     [roster clear];
+    [[CPNotificationCenter defaultCenter] postNotificationName:AccountConnectionStatusDidChangeNotification object:self];
 }
 
 - (BOOL)onStropheDisconnecting:(id)aConnection
 {
     CPLog.debug("XMPP: Disconnecting");
+    [[CPNotificationCenter defaultCenter] postNotificationName:AccountConnectionStatusDidChangeNotification object:self];
 }
 
 - (BOOL)onStropheDisconnected:(id)aConnection
 {
     CPLog.debug("XMPP: Disconnected");
     [roster clear];
+    [[CPNotificationCenter defaultCenter] postNotificationName:AccountConnectionStatusDidChangeNotification object:self];
 }
 
 - (BOOL)onStropheError:(id)aConnection
 {
     CPLog.error("XMPP: Error");
     [roster clear];
+    [[CPNotificationCenter defaultCenter] postNotificationName:AccountConnectionStatusDidChangeNotification object:self];
 }
 
 - (CPString)connectionStatus
