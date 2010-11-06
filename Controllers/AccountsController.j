@@ -20,6 +20,7 @@
 
 @import <AppKit/CPViewController.j>
 @import <AppKit/CPScrollView.j>
+@import <Foundation/CPUserDefaults.j>
 
 @import "../Models/Account.j"
 @import "ContactViewController.j"
