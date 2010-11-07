@@ -302,6 +302,19 @@ var SharedController = nil;
 - (@action)removeContact:(id)aSender
 {
     CPLog.debug("Removing a contact");
+    var contact = [self selectedItem];
+    if ([contact isKindOfClass:[TNStropheContact class]])
+        [[[self accountForContact:contact] roster] removeContact:contact];
+}
+
+- (Account)accountForContact:(TNStropheContact)aContact
+{
+    for (var i = 0; i < [accounts count]; i++)
+    {
+        var account = [accounts objectAtIndex:i];
+        if ([[account roster] containsJID:[aContact JID]])
+            return account;
+    }
 }
 
 
