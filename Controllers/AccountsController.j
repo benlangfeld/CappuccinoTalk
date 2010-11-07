@@ -25,6 +25,7 @@
 @import "../Models/Account.j"
 @import "ContactViewController.j"
 @import "ChatWindowController.j"
+@import "AddContactController.j"
 
 var SharedController = nil;
 
@@ -117,6 +118,16 @@ var SharedController = nil;
         addObserver:self
            selector:@selector(reload)
                name:TNStropheContactMessageTreatedNotification
+             object:nil];
+    [[CPNotificationCenter defaultCenter]
+        addObserver:self
+           selector:@selector(reload)
+               name:TNStropheRosterAddedContactNotification
+             object:nil];
+    [[CPNotificationCenter defaultCenter]
+        addObserver:self
+           selector:@selector(reload)
+               name:TNStropheRosterRemovedContactNotification
              object:nil];
 }
 
@@ -297,6 +308,22 @@ var SharedController = nil;
 - (@action)promptForNewContact:(id)aSender
 {
     CPLog.debug("Adding a contact");
+
+    var selected = [self selectedItem],
+        account;
+
+    if ([selected isKindOfClass:[TNStropheContact class]])
+        account = [self accountForContact:selected];
+    else if ([selected isKindOfClass:[Account class]])
+        account = selected;
+    else
+    {
+        CPLog.error("Must select an account to add a contact to!");
+        return;
+    }
+
+    var controller = [[AddContactController alloc] initWithAccount:account];
+    [controller showWindow:aSender];
 }
 
 - (@action)removeContact:(id)aSender
