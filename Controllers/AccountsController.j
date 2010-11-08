@@ -29,12 +29,15 @@
 
 var SharedController = nil;
 
+RosterViewDragType = @"RosterViewDragType";
+
 @implementation AccountsController : CPViewController
 {
             CPArray         accounts    @accessors;
             CPDictionary    chatWindows;
     @outlet CPScrollView    scrollView  @accessors;
     @outlet CPOutlineView   rosterView  @accessors;
+            CPArray         draggedItems;
 }
 
 + (AccountsController)sharedController
@@ -198,6 +201,8 @@ var SharedController = nil;
 
     [rosterView setDelegate:self];
     [rosterView setTarget:self];
+
+    [rosterView registerForDraggedTypes:[RosterViewDragType]];
 
     [rosterView setDoubleAction:@selector(rosterDidReceiveDoubleClick:)];
     [rosterView setDataSource:self];
@@ -456,6 +461,66 @@ var SharedController = nil;
     [textDataView setValue:CGInsetMake(0.0, 0.0, 0.0, 5.0) forThemeAttribute:@"content-inset"];
 
     return textDataView;
+}
+
+- (BOOL)outlineView:(CPOutlineView)anOutlineView writeItems:(CPArray)theItems toPasteboard:(CPPasteBoard)thePasteBoard
+{
+    for (var i = 0; i < [theItems count]; i++)
+    {
+        if (![[theItems objectAtIndex:i] isKindOfClass:[TNStropheContact class]])
+            return NO;
+    }
+    draggedItems = theItems;
+    [thePasteBoard declareTypes:[RosterViewDragType] owner:self];
+    [thePasteBoard setData:[CPKeyedArchiver archivedDataWithRootObject:theItems] forType:RosterViewDragType];
+
+    return YES;
+}
+
+- (CPDragOperation)outlineView:(CPOutlineView)anOutlineView validateDrop:(id < CPDraggingInfo >)theInfo proposedItem:(id)theItem proposedChildIndex:(int)theIndex
+{
+    if (!theItem)
+        [anOutlineView setDropItem:nil dropChildIndex:theIndex];
+
+    if (![theItem isKindOfClass:[TNStropheGroup class]])
+        return CPDragOperationNone;
+
+    // Check we're not trying to move stuff between accounts
+    var targetAccount   = [anOutlineView parentForItem:theItem],
+        betweenAccounts = NO;
+
+    for (var i = 0; i < [draggedItems count]; i++)
+    {
+        if (targetAccount != [anOutlineView parentForItem:[rosterView parentForItem:[draggedItems objectAtIndex:i]]])
+            betweenAccounts = YES;
+    }
+
+    if (betweenAccounts)
+        return CPDragOperationNone;
+
+    [anOutlineView setDropItem:theItem dropChildIndex:theIndex];
+
+    return CPDragOperationMove;
+}
+
+- (BOOL)outlineView:(CPOutlineView)outlineView acceptDrop:(id < CPDraggingInfo >)theInfo item:(id)theItem childIndex:(int)theIndex
+{
+    if (theItem === nil)
+        theItem = accounts;
+
+    var contactIndex = [draggedItems count];
+    while (contactIndex--)
+    {
+        var contact = [draggedItems objectAtIndex:contactIndex];
+
+        if (contact === theItem)
+            continue;
+
+        [[[outlineView parentForItem:[rosterView parentForItem:contact]] roster] changeGroup:theItem ofContact:contact];
+        theIndex += 1;
+    }
+
+    return YES;
 }
 
 @end
