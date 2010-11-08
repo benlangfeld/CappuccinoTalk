@@ -353,14 +353,11 @@ var SharedController = nil;
     if (!anItem)
         return [accounts count];
 
-    if ([anItem isKindOfClass:[CPDictionary class]] || [anItem isKindOfClass:[CPArray class]])
-        return [anItem count];
-
     if ([anItem isKindOfClass:[Account class]])
-        return [[[anItem roster] groups] count];
+        return [[anItem roster] populatedGroupsCount];
 
-    if ([anItem isKindOfClass:[TNStropheGroup class]])
-        return [[anItem contacts] count];
+    if ([anItem isKindOfClass:[CPDictionary class]] || [anItem isKindOfClass:[CPArray class]] || [anItem isKindOfClass:[TNStropheGroup class]])
+        return [anItem count];
 
     return 0;
 }
@@ -377,7 +374,7 @@ var SharedController = nil;
     else if ([anItem isKindOfClass:[TNStropheGroup class]])
         return [[anItem contacts] objectAtIndex:anIndex];
     else if ([anItem isKindOfClass:[Account class]])
-        return [[[anItem roster] groups] objectAtIndex:anIndex];
+        return [[[anItem roster] populatedGroups] objectAtIndex:anIndex];
 
     return;
 }
@@ -387,10 +384,10 @@ var SharedController = nil;
     if (([anItem isKindOfClass:[CPArray class]] || [anItem isKindOfClass:[CPDictionary class]]) && [anItem count] > 0)
         return YES;
 
-    if (([anItem isKindOfClass:[Account class]]) && [[[anItem roster] groups] count] > 0)
+    if (([anItem isKindOfClass:[Account class]]) && [[anItem roster] populatedGroupsCount] > 0)
         return YES;
 
-    if (([anItem isKindOfClass:[TNStropheGroup class]]) && [[anItem contacts] count] > 0)
+    if (([anItem isKindOfClass:[TNStropheGroup class]]) && [anItem count] > 0)
         return YES;
 
     return NO;
