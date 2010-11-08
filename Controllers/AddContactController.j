@@ -50,6 +50,8 @@
     [super awakeFromCib];
     [[self window] setDefaultButton:addButton];
 
+    [[self window] setTitle:@"Add a Contact to " + [account JID]];
+
     [jidField becomeFirstResponder];
     [jidField setValue:[CPColor grayColor] forThemeAttribute:"text-color" inState:CPTextFieldStatePlaceholder];
     [nameField setValue:[CPColor grayColor] forThemeAttribute:"text-color" inState:CPTextFieldStatePlaceholder];
