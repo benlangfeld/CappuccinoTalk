@@ -102,6 +102,16 @@ var SharedController = nil;
     [[CPNotificationCenter defaultCenter]
         addObserver:self
            selector:@selector(reload)
+               name:TNStropheContactNicknameUpdatedNotification
+             object:nil];
+    [[CPNotificationCenter defaultCenter]
+        addObserver:self
+           selector:@selector(reload)
+               name:TNStropheContactGroupUpdatedNotification
+             object:nil];
+    [[CPNotificationCenter defaultCenter]
+        addObserver:self
+           selector:@selector(reload)
                name:TNStropheContactPresenceUpdatedNotification
              object:nil];
     [[CPNotificationCenter defaultCenter]
@@ -128,6 +138,11 @@ var SharedController = nil;
         addObserver:self
            selector:@selector(reload)
                name:TNStropheRosterRemovedContactNotification
+             object:nil];
+    [[CPNotificationCenter defaultCenter]
+        addObserver:self
+           selector:@selector(reload)
+               name:TNStropheRosterRemovedGroupNotification
              object:nil];
 }
 
