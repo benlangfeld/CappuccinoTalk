@@ -20,6 +20,7 @@
 
 @import <AppKit/CPViewController.j>
 @import <AppKit/CPScrollView.j>
+@import <AppKit/CPSound.j>
 @import <Foundation/CPUserDefaults.j>
 
 @import "../Models/Account.j"
@@ -38,6 +39,7 @@ RosterViewDragType = @"RosterViewDragType";
     @outlet CPScrollView    scrollView  @accessors;
     @outlet CPOutlineView   rosterView  @accessors;
             CPArray         draggedItems;
+            CPSound         messageReceivedSound;
 }
 
 + (AccountsController)sharedController
@@ -52,8 +54,9 @@ RosterViewDragType = @"RosterViewDragType";
 {
     if (self = [super init])
     {
-        accounts    = [CPArray array];
-        chatWindows = [CPDictionary dictionary];
+        accounts                = [CPArray array];
+        chatWindows             = [CPDictionary dictionary];
+        messageReceivedSound    = [[CPSound alloc] initWithContentsOfFile:[[CPBundle bundleForClass:[self class]] pathForResource:@"Receive.mp3"] byReference:NO];
         [self listenForReloadNotifications];
         [[CPNotificationCenter defaultCenter]
             addObserver:self
@@ -74,6 +77,11 @@ RosterViewDragType = @"RosterViewDragType";
             addObserver:self
                selector:@selector(storeAccounts)
                    name:AccountWasDeletedNotification
+                 object:nil];
+        [[CPNotificationCenter defaultCenter]
+            addObserver:messageReceivedSound
+               selector:@selector(play)
+                   name:TNStropheContactMessageReceivedNotification
                  object:nil];
         [self setupStoredAccounts];
     }
