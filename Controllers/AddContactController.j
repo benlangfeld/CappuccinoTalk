@@ -29,6 +29,7 @@
     @outlet CPTextField     jidField;
     @outlet CPTextField     nameField;
     @outlet CPPopUpButton   groupPicker;
+    @outlet CPTextField     groupNameField;
             Account         account;
 }
 
@@ -52,6 +53,7 @@
     [jidField becomeFirstResponder];
     [jidField setValue:[CPColor grayColor] forThemeAttribute:"text-color" inState:CPTextFieldStatePlaceholder];
     [nameField setValue:[CPColor grayColor] forThemeAttribute:"text-color" inState:CPTextFieldStatePlaceholder];
+    [groupNameField setValue:[CPColor grayColor] forThemeAttribute:"text-color" inState:CPTextFieldStatePlaceholder];
 
     [groupPicker removeAllItems];
 
@@ -64,12 +66,33 @@
         [groupPicker addItem:item];
     }
 
+    var newGroupItem = [CPMenuItem new];
+    [newGroupItem setTag:@"CreateNewGroup"];
+    [newGroupItem setTitle:@"Create a new group"];
+    [newGroupItem setTarget:self];
+    [newGroupItem setAction:@selector(newGroupSelected:)];
+
+    [groupPicker addItem:[CPMenuItem separatorItem]];
+    [groupPicker addItem:newGroupItem];
+
     [groupPicker selectItemAtIndex:0];
+}
+
+- (@action)newGroupSelected:(id)aSender
+{
+    CPLog.debug("New group was selected!");
+    var newFrame = [[self window] frame];
+    newFrame.size.height += 30.0;
+    [[self window] setFrame:newFrame display:YES animate:YES];
+    [groupNameField setHidden:NO];
 }
 
 - (@action)add:(id)aSender
 {
-    [[account roster] addContact:[jidField objectValue] withName:[nameField objectValue] inGroupWithName:[[groupPicker selectedItem] tag]];
+    var groupName = [[groupPicker selectedItem] tag];
+    if (groupName === @"CreateNewGroup")
+        groupName = [groupNameField objectValue];
+    [[account roster] addContact:[jidField objectValue] withName:[nameField objectValue] inGroupWithName:groupName];
     [self close];
 }
 
