@@ -313,7 +313,9 @@ var SharedController = nil;
         account;
 
     if ([selected isKindOfClass:[TNStropheContact class]])
-        account = [self accountForContact:selected];
+        account = [rosterView parentForItem:[rosterView parentForItem:selected]];
+    else if ([selected isKindOfClass:[TNStropheGroup class]])
+        account = [rosterView parentForItem:selected];
     else if ([selected isKindOfClass:[Account class]])
         account = selected;
     else
