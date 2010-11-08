@@ -317,10 +317,7 @@ var SharedController = nil;
     else if ([selected isKindOfClass:[Account class]])
         account = selected;
     else
-    {
-        CPLog.error("Must select an account to add a contact to!");
-        return;
-    }
+        account = [accounts objectAtIndex:0];
 
     var controller = [[AddContactController alloc] initWithAccount:account];
     [controller showWindow:aSender];
