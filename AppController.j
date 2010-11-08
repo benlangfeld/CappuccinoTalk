@@ -51,7 +51,7 @@
     [plusButton setTarget:[AccountsController sharedController]];
     [plusButton setAction:@selector(promptForNewContact:)];
     [minusButton setTarget:[AccountsController sharedController]];
-    [minusButton setAction:@selector(removeContact:)];
+    [minusButton setAction:@selector(rosterMinusWasClicked:)];
 
     var manageAccountsItem = [[CPMenuItem alloc] initWithTitle:@"Manage Accounts" action:@selector(manageAccounts:) keyEquivalent:nil];
     [manageAccountsItem setTarget:[AccountsController sharedController]];

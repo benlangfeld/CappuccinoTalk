@@ -340,22 +340,14 @@ var SharedController = nil;
     [controller showWindow:aSender];
 }
 
-- (@action)removeContact:(id)aSender
+- (@action)rosterMinusWasClicked:(id)aSender
 {
-    CPLog.debug("Removing a contact");
-    var contact = [self selectedItem];
-    if ([contact isKindOfClass:[TNStropheContact class]])
-        [[[self accountForContact:contact] roster] removeContact:contact];
-}
-
-- (Account)accountForContact:(TNStropheContact)aContact
-{
-    for (var i = 0; i < [accounts count]; i++)
-    {
-        var account = [accounts objectAtIndex:i];
-        if ([[account roster] containsJID:[aContact JID]])
-            return account;
-    }
+    CPLog.debug("Removing something!");
+    var selected = [self selectedItem];
+    if ([selected isKindOfClass:[TNStropheContact class]])
+        [[[rosterView parentForItem:[rosterView parentForItem:selected]] roster] removeContact:selected];
+    else if ([selected isKindOfClass:[TNStropheGroup class]])
+        [[[rosterView parentForItem:selected] roster] removeGroup:selected];
 }
 
 
