@@ -27,6 +27,7 @@
 @import "ContactViewController.j"
 @import "ChatWindowController.j"
 @import "AddContactController.j"
+@import "XMLConsoleController.j"
 
 var SharedController = nil;
 
@@ -327,6 +328,14 @@ RosterViewDragType = @"RosterViewDragType";
 - (void)expandAccount:(CPNotification)aNotification
 {
     [rosterView expandItem:[[aNotification object] connection] expandChildren:YES];
+}
+
+- (void)openXMLConsole:(id)aSender
+{
+    var selected = [self selectedItem];
+    if (![selected isKindOfClass:[Account class]])
+        return;
+    [[selected xmlConsoleController] showWindow:self];
 }
 
 

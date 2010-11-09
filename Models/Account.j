@@ -37,11 +37,12 @@ AccountConnectionStatusDidChangeNotification    = @"AccountConnectionStatusDidCh
 
 @implementation Account : TNStropheConnection
 {
-    TNStropheRoster     roster                  @accessors;
-    BOOL                enabled                 @accessors(property=isEnabled);
+    TNStropheRoster         roster                  @accessors;
+    BOOL                    enabled                 @accessors(property=isEnabled);
 
-    CPWindowController  setStatusController;
-    CPWindowController  editAccountController;
+    CPWindowController      setStatusController;
+    CPWindowController      editAccountController;
+    XMLConsoleController    xmlConsoleController;
 }
 
 + (Account)accountWithJID:(CPString)aJID andPassword:(CPString)aPassword enabled:(BOOL)isEnabled
@@ -184,6 +185,14 @@ AccountConnectionStatusDidChangeNotification    = @"AccountConnectionStatusDidCh
     [stanza addChildWithName:@"status"];
     [stanza addTextNode:aStatus];
     [self send:stanza];
+}
+
+- (XMLConsoleController)xmlConsoleController
+{
+    if (!xmlConsoleController)
+        xmlConsoleController = [[XMLConsoleController alloc] initWithAccount:self];
+
+    return xmlConsoleController;
 }
 
 @end

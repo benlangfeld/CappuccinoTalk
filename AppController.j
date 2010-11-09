@@ -56,6 +56,9 @@
     var manageAccountsItem = [[CPMenuItem alloc] initWithTitle:@"Manage Accounts" action:@selector(manageAccounts:) keyEquivalent:nil];
     [manageAccountsItem setTarget:[AccountsController sharedController]];
 
+    var consoleItem = [[CPMenuItem alloc] initWithTitle:@"Open XML Console for selected Account" action:@selector(openXMLConsole:) keyEquivalent:nil];
+    [consoleItem setTarget:[AccountsController sharedController]];
+
     var connectAccountsItem = [[CPMenuItem alloc] initWithTitle:@"Connect All Accounts" action:@selector(connectAllAccounts:) keyEquivalent:nil];
     [connectAccountsItem setTarget:[AccountsController sharedController]];
 
@@ -75,6 +78,7 @@
     [manageAccountsButton addItem:disconnectAccountsItem];
     [manageAccountsButton addItem:[CPMenuItem separatorItem]];
     [manageAccountsButton addItem:manageAccountsItem];
+    [manageAccountsButton addItem:consoleItem];
 
     [rosterButtonBar setButtons:[plusButton, minusButton, manageAccountsButton]];
 }
