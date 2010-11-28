@@ -276,7 +276,7 @@ RosterViewDragType = @"RosterViewDragType";
     [[ManageAccountsController sharedController] showWindow:self];
 }
 
-- (Account)accountWithJID:(CPString)aJID
+- (Account)accountWithJID:(TNStropheJID)aJID
 {
     for (var i = 0; i < [accounts count]; i++)
     {
@@ -286,12 +286,12 @@ RosterViewDragType = @"RosterViewDragType";
     }
 }
 
-- (void)addAccountWithJID:(CPString)aJID andPassword:(CPString)aPassword
+- (void)addAccountWithJID:(TNStropheJID)aJID andPassword:(CPString)aPassword
 {
     [self addAccountWithJID:aJID andPassword:aPassword enabled:YES];
 }
 
-- (void)addAccountWithJID:(CPString)aJID andPassword:(CPString)aPassword enabled:(BOOL)isEnabled
+- (void)addAccountWithJID:(TNStropheJID)aJID andPassword:(CPString)aPassword enabled:(BOOL)isEnabled
 {
     CPLog.debug("Adding account with JID " + aJID + " and password " + aPassword);
     [self addAccount:[Account accountWithJID:aJID andPassword:aPassword enabled:isEnabled]];
@@ -305,7 +305,7 @@ RosterViewDragType = @"RosterViewDragType";
         [anAccount connect];
 }
 
-- (void)deleteAccountWithJID:(CPString)aJID
+- (void)deleteAccountWithJID:(TNStropheJID)aJID
 {
     [self deleteAccount:[self accountWithJID:aJID]];
     [self reload];

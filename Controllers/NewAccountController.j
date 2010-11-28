@@ -52,7 +52,7 @@
 
 - (@action)submit:(id)aSender
 {
-    [[AccountsController sharedController] addAccountWithJID:[jidField objectValue] andPassword:[passwordField objectValue]];
+    [[AccountsController sharedController] addAccountWithJID:[TNStropheJID stropheJIDWithString:[jidField objectValue]] andPassword:[passwordField objectValue]];
     [self close];
 }
 

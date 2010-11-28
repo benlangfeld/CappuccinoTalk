@@ -94,7 +94,7 @@
     var groupName = [[groupPicker selectedItem] tag];
     if (groupName === @"CreateNewGroup")
         groupName = [groupNameField objectValue];
-    [[account roster] addContact:[jidField objectValue] withName:[nameField objectValue] inGroupWithName:groupName];
+    [[account roster] addContact:[TNStropheJID stropheJIDWithString:[jidField objectValue]] withName:[nameField objectValue] inGroupWithName:groupName];
     [self close];
 }
 

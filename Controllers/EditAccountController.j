@@ -61,7 +61,7 @@
 
 - (@action)submit:(id)aSender
 {
-    [account editWithJID:[jidField objectValue] andPassword:[passwordField objectValue] changeRegistration:[changeRegistrationField objectValue] === 1];
+    [account editWithJID:[TNStropheJID stropheJIDWithString:[jidField objectValue]] andPassword:[passwordField objectValue] changeRegistration:[changeRegistrationField objectValue] === 1];
     [self close];
 }
 

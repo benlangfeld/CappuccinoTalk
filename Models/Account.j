@@ -45,14 +45,14 @@ AccountConnectionStatusDidChangeNotification    = @"AccountConnectionStatusDidCh
     XMLConsoleController    xmlConsoleController;
 }
 
-+ (Account)accountWithJID:(CPString)aJID andPassword:(CPString)aPassword enabled:(BOOL)isEnabled
++ (Account)accountWithJID:(TNStropheJID)aJID andPassword:(CPString)aPassword enabled:(BOOL)isEnabled
 {
     return [[Account alloc] initWithJID:aJID andPassword:aPassword enabled:isEnabled];
 }
 
-- (id)initWithJID:(CPString)aJID andPassword:(CPString)aPassword enabled:(BOOL)isEnabled
+- (id)initWithJID:(TNStropheJID)aJID andPassword:(CPString)aPassword enabled:(BOOL)isEnabled
 {
-    if (self = [super initWithService:BOSHService JID:aJID resource:nil password:aPassword])
+    if (self = [super initWithService:BOSHService JID:aJID password:aPassword])
     {
         enabled = isEnabled;
         roster  = [TNStropheRoster rosterWithConnection:self];
@@ -65,7 +65,7 @@ AccountConnectionStatusDidChangeNotification    = @"AccountConnectionStatusDidCh
 
 - (CPString)description
 {
-    return [self JID];
+    return [[self JID] full];
 }
 
 - (BOOL)onStropheConnecting:(id)aConnection
@@ -154,7 +154,7 @@ AccountConnectionStatusDidChangeNotification    = @"AccountConnectionStatusDidCh
     return editAccountController;
 }
 
-- (void)editWithJID:(CPString)aJID andPassword:(CPString)aPassword changeRegistration:(BOOL)changeRegistration
+- (void)editWithJID:(TNStropheJID)aJID andPassword:(CPString)aPassword changeRegistration:(BOOL)changeRegistration
 {
     [self disconnect];
     [self setJID:aJID];

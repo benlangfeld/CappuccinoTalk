@@ -9,6 +9,6 @@
 	<key>CPPrincipalClass</key>
 	<string>CPApplication</string>
 	<key>XMPPBOSHService</key>
-	<string>http://im.studiotalker.com:5280/bosh</string>
+	<string>http://im.langfeld.me:5280/bosh</string>
 </dict>
 </plist>
