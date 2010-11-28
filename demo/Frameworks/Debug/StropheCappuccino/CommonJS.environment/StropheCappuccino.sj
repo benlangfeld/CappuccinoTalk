@@ -87,13 +87,13 @@ objj_msgSend(TNStropheConnection, "addNamespaceWithName:value:", "PUBSUB_NODE_CO
 objj_msgSend(TNStropheConnection, "addNamespaceWithName:value:", "PUBSUB_NOTIFY", "http://jabber.org/protocol/pubsub+notify");
 objj_msgSend(TNStropheConnection, "addNamespaceWithName:value:", "PUBSUB_SUBSCRIBE OPTIONS", "http://jabber.org/protocol/pubsub#subscribe_options");
 
-p;21;TNStropheConnection.jt;21959;@STATIC;1.0;I;23;Foundation/Foundation.ji;14;TNStropheJID.ji;17;TNStropheStanza.ji;25;Resources/Strophe/sha1.jsi;18;TNStropheGlobals.jt;21817;objj_executeFile("Foundation/Foundation.j", NO);
+p;21;TNStropheConnection.jt;24792;@STATIC;1.0;I;23;Foundation/Foundation.ji;14;TNStropheJID.ji;17;TNStropheStanza.ji;25;Resources/Strophe/sha1.jsi;18;TNStropheGlobals.jt;24650;objj_executeFile("Foundation/Foundation.j", NO);
 objj_executeFile("TNStropheJID.j", YES);
 objj_executeFile("TNStropheStanza.j", YES);
 objj_executeFile("Resources/Strophe/sha1.js", YES);
 objj_executeFile("TNStropheGlobals.j", YES);
 {var the_class = objj_allocateClassPair(CPObject, "TNStropheConnection"),
-meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_connected"), new objj_ivar("_features"), new objj_ivar("_clientNode"), new objj_ivar("_identityCategory"), new objj_ivar("_identityName"), new objj_ivar("_identityType"), new objj_ivar("_JID"), new objj_ivar("_password"), new objj_ivar("_delegate"), new objj_ivar("_maxConnections"), new objj_ivar("_connectionTimeout"), new objj_ivar("_registeredHandlerDict"), new objj_ivar("_boshService"), new objj_ivar("_connection")]);
+meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_connected"), new objj_ivar("_features"), new objj_ivar("_clientNode"), new objj_ivar("_identityCategory"), new objj_ivar("_identityName"), new objj_ivar("_identityType"), new objj_ivar("_password"), new objj_ivar("_giveupTimeout"), new objj_ivar("_currentStatus"), new objj_ivar("_delegate"), new objj_ivar("_connectionTimeout"), new objj_ivar("_maxConnections"), new objj_ivar("_JID"), new objj_ivar("_registeredHandlerDict"), new objj_ivar("_boshService"), new objj_ivar("_connection"), new objj_ivar("_giveUpTimer")]);
 objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("isConnected"), function $TNStropheConnection__isConnected(self, _cmd)
 { with(self)
@@ -161,18 +161,6 @@ new objj_method(sel_getUid("setIdentityType:"), function $TNStropheConnection__s
 _identityType = newValue;
 }
 },["void","id"]),
-new objj_method(sel_getUid("JID"), function $TNStropheConnection__JID(self, _cmd)
-{ with(self)
-{
-return _JID;
-}
-},["id"]),
-new objj_method(sel_getUid("setJID:"), function $TNStropheConnection__setJID_(self, _cmd, newValue)
-{ with(self)
-{
-_JID = newValue;
-}
-},["void","id"]),
 new objj_method(sel_getUid("password"), function $TNStropheConnection__password(self, _cmd)
 { with(self)
 {
@@ -183,6 +171,30 @@ new objj_method(sel_getUid("setPassword:"), function $TNStropheConnection__setPa
 { with(self)
 {
 _password = newValue;
+}
+},["void","id"]),
+new objj_method(sel_getUid("giveupTimeout"), function $TNStropheConnection__giveupTimeout(self, _cmd)
+{ with(self)
+{
+return _giveupTimeout;
+}
+},["id"]),
+new objj_method(sel_getUid("setGiveupTimeout:"), function $TNStropheConnection__setGiveupTimeout_(self, _cmd, newValue)
+{ with(self)
+{
+_giveupTimeout = newValue;
+}
+},["void","id"]),
+new objj_method(sel_getUid("currentStatus"), function $TNStropheConnection__currentStatus(self, _cmd)
+{ with(self)
+{
+return _currentStatus;
+}
+},["id"]),
+new objj_method(sel_getUid("_setCurrentStatus:"), function $TNStropheConnection___setCurrentStatus_(self, _cmd, newValue)
+{ with(self)
+{
+_currentStatus = newValue;
 }
 },["void","id"]),
 new objj_method(sel_getUid("delegate"), function $TNStropheConnection__delegate(self, _cmd)
@@ -197,6 +209,18 @@ new objj_method(sel_getUid("setDelegate:"), function $TNStropheConnection__setDe
 _delegate = newValue;
 }
 },["void","id"]),
+new objj_method(sel_getUid("connectionTimeout"), function $TNStropheConnection__connectionTimeout(self, _cmd)
+{ with(self)
+{
+return _connectionTimeout;
+}
+},["id"]),
+new objj_method(sel_getUid("setConnectionTimeout:"), function $TNStropheConnection__setConnectionTimeout_(self, _cmd, newValue)
+{ with(self)
+{
+_connectionTimeout = newValue;
+}
+},["void","id"]),
 new objj_method(sel_getUid("maxConnections"), function $TNStropheConnection__maxConnections(self, _cmd)
 { with(self)
 {
@@ -209,16 +233,16 @@ new objj_method(sel_getUid("setMaxConnections:"), function $TNStropheConnection_
 _maxConnections = newValue;
 }
 },["void","id"]),
-new objj_method(sel_getUid("connectionTimeout"), function $TNStropheConnection__connectionTimeout(self, _cmd)
+new objj_method(sel_getUid("JID"), function $TNStropheConnection__JID(self, _cmd)
 { with(self)
 {
-return _connectionTimeout;
+return _JID;
 }
 },["id"]),
-new objj_method(sel_getUid("setConnectionTimeout:"), function $TNStropheConnection__setConnectionTimeout_(self, _cmd, newValue)
+new objj_method(sel_getUid("setJID:"), function $TNStropheConnection__setJID_(self, _cmd, newValue)
 { with(self)
 {
-_connectionTimeout = newValue;
+_JID = newValue;
 }
 },["void","id"]),
 new objj_method(sel_getUid("connection"), function $TNStropheConnection__connection(self, _cmd)
@@ -242,6 +266,8 @@ _connection = newValue;
         _connected = NO;
         _maxConnections = 10;
         _connectionTimeout = 3600;
+        _giveupTimeout = 8.0;
+        _currentStatus = Strophe.Status.DISCONNECTED;
         _connection = new Strophe.Connection(_boshService);
         _clientNode = "http://cappuccino.org";
         _identityCategory = "client";
@@ -266,49 +292,71 @@ _connection = newValue;
 },["id","CPString","TNStropheJID","CPString"]), new objj_method(sel_getUid("connect"), function $TNStropheConnection__connect(self, _cmd)
 { with(self)
 {
+    if (_currentStatus !== Strophe.Status.DISCONNECTED)
+        return;
     objj_msgSend(self, "registerSelector:ofObject:withDict:", sel_getUid("_didReceivePing:"), self, objj_msgSend(CPDictionary, "dictionaryWithObjectsAndKeys:", "iq", "name", "get", "type"));
     _connection.connect(objj_msgSend(_JID, "full"), _password, function (status, errorCond)
     {
         var selector,
             notificationName;
-        switch (status)
+        _currentStatus = status;
+        if (errorCond)
         {
-            case Strophe.Status.ERROR:
-                selector = sel_getUid("onStropheError:");
-                notificationName = TNStropheConnectionStatusError;
-                break;
-            case Strophe.Status.CONNECTING:
-                selector = sel_getUid("onStropheConnecting:");
-                notificationName = TNStropheConnectionStatusConnecting;
-                break;
-            case Strophe.Status.CONNFAIL:
-                selector = sel_getUid("onStropheConnectFail:");
-                notificationName = TNStropheConnectionStatusConnectionFailure;
-                break;
-            case Strophe.Status.AUTHENTICATING:
-                selector = sel_getUid("onStropheAuthenticating:");
-                notificationName = TNStropheConnectionStatusAuthenticating;
-                break;
-            case Strophe.Status.AUTHFAIL:
-                selector = sel_getUid("onStropheAuthFail:");
-                notificationName = TNStropheConnectionStatusAuthFailure;
-                break;
-            case Strophe.Status.DISCONNECTING:
-                selector = sel_getUid("onStropheDisconnecting:");
-                notificationName = TNStropheConnectionStatusDisconnecting;
-                break;
-            case Strophe.Status.DISCONNECTED:
-                selector = sel_getUid("onStropheDisconnected:");
-                notificationName = TNStropheConnectionStatusDisconnected;
-                _connected = NO;
-                break;
-            case Strophe.Status.CONNECTED:
-                _connection.send($pres().tree());
-                objj_msgSend(self, "sendCAPS");
-                selector = sel_getUid("onStropheConnected:");
-                notificationName = TNStropheConnectionStatusConnected;
-                _connected = YES;
-                break;
+            _currentStatus = Strophe.Status.DISCONNECTED;
+            if (objj_msgSend(_delegate, "respondsToSelector:", sel_getUid("connection:errorCondition:")))
+                objj_msgSend(_delegate, "connection:errorCondition:", self, errorCond);
+        }
+        else
+        {
+            switch (status)
+            {
+                case Strophe.Status.ERROR:
+                    selector = sel_getUid("onStropheError:");
+                    notificationName = TNStropheConnectionStatusError;
+                    break;
+                case Strophe.Status.CONNECTING:
+                    selector = sel_getUid("onStropheConnecting:");
+                    notificationName = TNStropheConnectionStatusConnecting;
+                    _giveUpTimer = objj_msgSend(CPTimer, "scheduledTimerWithTimeInterval:callback:repeats:", _giveupTimeout, function(aTimer) {
+                            _currentStatus = Strophe.Status.DISCONNECTED;
+                            _giveUpTimer = nil;
+                            _connection = nil;
+                            _connection = new Strophe.Connection(_boshService);
+                            if ((_currentStatus === Strophe.Status.CONNECTING) && (objj_msgSend(_delegate, "respondsToSelector:", sel_getUid("connection:errorCondition:"))))
+                                objj_msgSend(_delegate, "connection:errorCondition:", self, "Cannot connect");
+                        }, NO);
+                    break;
+                case Strophe.Status.CONNFAIL:
+                    selector = sel_getUid("onStropheConnectFail:");
+                    notificationName = TNStropheConnectionStatusConnectionFailure;
+                    break;
+                case Strophe.Status.AUTHENTICATING:
+                    selector = sel_getUid("onStropheAuthenticating:");
+                    notificationName = TNStropheConnectionStatusAuthenticating;
+                    break;
+                case Strophe.Status.AUTHFAIL:
+                    selector = sel_getUid("onStropheAuthFail:");
+                    notificationName = TNStropheConnectionStatusAuthFailure;
+                    break;
+                case Strophe.Status.DISCONNECTING:
+                    selector = sel_getUid("onStropheDisconnecting:");
+                    notificationName = TNStropheConnectionStatusDisconnecting;
+                    break;
+                case Strophe.Status.DISCONNECTED:
+                    selector = sel_getUid("onStropheDisconnected:");
+                    notificationName = TNStropheConnectionStatusDisconnected;
+                    _connected = NO;
+                    break;
+                case Strophe.Status.CONNECTED:
+                    _connection.send($pres().tree());
+                    objj_msgSend(self, "sendCAPS");
+                    selector = sel_getUid("onStropheConnected:");
+                    notificationName = TNStropheConnectionStatusConnected;
+                    _connected = YES;
+                    if (_giveUpTimer)
+                        objj_msgSend(_giveUpTimer, "invalidate");
+                    break;
+            }
         }
         if (objj_msgSend(_delegate, "respondsToSelector:", selector))
             objj_msgSend(_delegate, "performSelector:withObject:", selector, self);
@@ -318,6 +366,8 @@ _connection = newValue;
 },["void"]), new objj_method(sel_getUid("disconnect"), function $TNStropheConnection__disconnect(self, _cmd)
 { with(self)
 {
+    if (_currentStatus !== Strophe.Status.CONNECTED)
+        return;
     objj_msgSend(objj_msgSend(CPNotificationCenter, "defaultCenter"), "postNotificationName:object:", TNStropheConnectionStatusWillDisconnect, self);
     _connection.disconnect();
 }
@@ -396,9 +446,19 @@ _connection = newValue;
 },["BOOL","TNStropheStanza"]), new objj_method(sel_getUid("send:"), function $TNStropheConnection__send_(self, _cmd, aStanza)
 { with(self)
 {
-    CPLog.trace("StropheCappuccino Stanza Send:")
-    CPLog.trace(aStanza);
-    _connection.send(objj_msgSend(aStanza, "tree"));
+    if (_currentStatus == Strophe.Status.CONNECTED)
+        objj_msgSend(objj_msgSend(CPRunLoop, "currentRunLoop"), "performSelector:target:argument:order:modes:", sel_getUid("_performSend:"), self, aStanza, 0, [CPDefaultRunLoopMode]);
+}
+},["void","TNStropheStanza"]), new objj_method(sel_getUid("_performSend:"), function $TNStropheConnection___performSend_(self, _cmd, aStanza)
+{ with(self)
+{
+    if (_currentStatus == Strophe.Status.CONNECTED)
+    {
+        CPLog.trace("StropheCappuccino Stanza Send:")
+        CPLog.trace(aStanza);
+        _connection.send(objj_msgSend(aStanza, "tree"));
+        objj_msgSend(self, "flush");
+    }
 }
 },["void","TNStropheStanza"]), new objj_method(sel_getUid("publishPEPPayload:toNode:"), function $TNStropheConnection__publishPEPPayload_toNode_(self, _cmd, aPayload, aNode)
 { with(self)

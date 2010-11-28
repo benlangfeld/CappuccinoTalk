@@ -77,14 +77,14 @@ objj_msgSend(TNStropheConnection,"addNamespaceWithName:value:","PUBSUB_OWNER","h
 objj_msgSend(TNStropheConnection,"addNamespaceWithName:value:","PUBSUB_NODE_CONFIG","http://jabber.org/protocol/pubsub#node_config");
 objj_msgSend(TNStropheConnection,"addNamespaceWithName:value:","PUBSUB_NOTIFY","http://jabber.org/protocol/pubsub+notify");
 objj_msgSend(TNStropheConnection,"addNamespaceWithName:value:","PUBSUB_SUBSCRIBE OPTIONS","http://jabber.org/protocol/pubsub#subscribe_options");
-p;21;TNStropheConnection.jt;15972;@STATIC;1.0;I;23;Foundation/Foundation.ji;14;TNStropheJID.ji;17;TNStropheStanza.ji;25;Resources/Strophe/sha1.jsi;18;TNStropheGlobals.jt;15830;
+p;21;TNStropheConnection.jt;16834;@STATIC;1.0;I;23;Foundation/Foundation.ji;14;TNStropheJID.ji;17;TNStropheStanza.ji;25;Resources/Strophe/sha1.jsi;18;TNStropheGlobals.jt;16692;
 objj_executeFile("Foundation/Foundation.j",NO);
 objj_executeFile("TNStropheJID.j",YES);
 objj_executeFile("TNStropheStanza.j",YES);
 objj_executeFile("Resources/Strophe/sha1.js",YES);
 objj_executeFile("TNStropheGlobals.j",YES);
 var _1=objj_allocateClassPair(CPObject,"TNStropheConnection"),_2=_1.isa;
-class_addIvars(_1,[new objj_ivar("_connected"),new objj_ivar("_features"),new objj_ivar("_clientNode"),new objj_ivar("_identityCategory"),new objj_ivar("_identityName"),new objj_ivar("_identityType"),new objj_ivar("_password"),new objj_ivar("_currentStatus"),new objj_ivar("_delegate"),new objj_ivar("_connectionTimeout"),new objj_ivar("_maxConnections"),new objj_ivar("_JID"),new objj_ivar("_registeredHandlerDict"),new objj_ivar("_boshService"),new objj_ivar("_connection")]);
+class_addIvars(_1,[new objj_ivar("_connected"),new objj_ivar("_features"),new objj_ivar("_clientNode"),new objj_ivar("_identityCategory"),new objj_ivar("_identityName"),new objj_ivar("_identityType"),new objj_ivar("_password"),new objj_ivar("_giveupTimeout"),new objj_ivar("_currentStatus"),new objj_ivar("_delegate"),new objj_ivar("_connectionTimeout"),new objj_ivar("_maxConnections"),new objj_ivar("_JID"),new objj_ivar("_registeredHandlerDict"),new objj_ivar("_boshService"),new objj_ivar("_connection"),new objj_ivar("_giveUpTimer")]);
 objj_registerClassPair(_1);
 class_addMethods(_1,[new objj_method(sel_getUid("isConnected"),function(_3,_4){
 with(_3){
@@ -138,62 +138,71 @@ return _password;
 with(_20){
 _password=_22;
 }
-}),new objj_method(sel_getUid("currentStatus"),function(_23,_24){
+}),new objj_method(sel_getUid("giveupTimeout"),function(_23,_24){
 with(_23){
+return _giveupTimeout;
+}
+}),new objj_method(sel_getUid("setGiveupTimeout:"),function(_25,_26,_27){
+with(_25){
+_giveupTimeout=_27;
+}
+}),new objj_method(sel_getUid("currentStatus"),function(_28,_29){
+with(_28){
 return _currentStatus;
 }
-}),new objj_method(sel_getUid("_setCurrentStatus:"),function(_25,_26,_27){
-with(_25){
-_currentStatus=_27;
+}),new objj_method(sel_getUid("_setCurrentStatus:"),function(_2a,_2b,_2c){
+with(_2a){
+_currentStatus=_2c;
 }
-}),new objj_method(sel_getUid("delegate"),function(_28,_29){
-with(_28){
+}),new objj_method(sel_getUid("delegate"),function(_2d,_2e){
+with(_2d){
 return _delegate;
 }
-}),new objj_method(sel_getUid("setDelegate:"),function(_2a,_2b,_2c){
-with(_2a){
-_delegate=_2c;
+}),new objj_method(sel_getUid("setDelegate:"),function(_2f,_30,_31){
+with(_2f){
+_delegate=_31;
 }
-}),new objj_method(sel_getUid("connectionTimeout"),function(_2d,_2e){
-with(_2d){
+}),new objj_method(sel_getUid("connectionTimeout"),function(_32,_33){
+with(_32){
 return _connectionTimeout;
 }
-}),new objj_method(sel_getUid("setConnectionTimeout:"),function(_2f,_30,_31){
-with(_2f){
-_connectionTimeout=_31;
+}),new objj_method(sel_getUid("setConnectionTimeout:"),function(_34,_35,_36){
+with(_34){
+_connectionTimeout=_36;
 }
-}),new objj_method(sel_getUid("maxConnections"),function(_32,_33){
-with(_32){
+}),new objj_method(sel_getUid("maxConnections"),function(_37,_38){
+with(_37){
 return _maxConnections;
 }
-}),new objj_method(sel_getUid("setMaxConnections:"),function(_34,_35,_36){
-with(_34){
-_maxConnections=_36;
+}),new objj_method(sel_getUid("setMaxConnections:"),function(_39,_3a,_3b){
+with(_39){
+_maxConnections=_3b;
 }
-}),new objj_method(sel_getUid("JID"),function(_37,_38){
-with(_37){
+}),new objj_method(sel_getUid("JID"),function(_3c,_3d){
+with(_3c){
 return _JID;
 }
-}),new objj_method(sel_getUid("setJID:"),function(_39,_3a,_3b){
-with(_39){
-_JID=_3b;
+}),new objj_method(sel_getUid("setJID:"),function(_3e,_3f,_40){
+with(_3e){
+_JID=_40;
 }
-}),new objj_method(sel_getUid("connection"),function(_3c,_3d){
-with(_3c){
+}),new objj_method(sel_getUid("connection"),function(_41,_42){
+with(_41){
 return _connection;
 }
-}),new objj_method(sel_getUid("_setConnection:"),function(_3e,_3f,_40){
-with(_3e){
-_connection=_40;
+}),new objj_method(sel_getUid("_setConnection:"),function(_43,_44,_45){
+with(_43){
+_connection=_45;
 }
-}),new objj_method(sel_getUid("initWithService:"),function(_41,_42,_43){
-with(_41){
-if(_41=objj_msgSendSuper({receiver:_41,super_class:objj_getClass("TNStropheConnection").super_class},"init")){
-_boshService=_43;
+}),new objj_method(sel_getUid("initWithService:"),function(_46,_47,_48){
+with(_46){
+if(_46=objj_msgSendSuper({receiver:_46,super_class:objj_getClass("TNStropheConnection").super_class},"init")){
+_boshService=_48;
 _registeredHandlerDict=objj_msgSend(CPDictionary,"dictionary");
 _connected=NO;
 _maxConnections=10;
 _connectionTimeout=3600;
+_giveupTimeout=8;
 _currentStatus=Strophe.Status.DISCONNECTED;
 _connection=new Strophe.Connection(_boshService);
 _clientNode="http://cappuccino.org";
@@ -202,251 +211,264 @@ _identityName="StropheCappuccino";
 _identityType="web";
 _features=[Strophe.NS.CAPS,Strophe.NS.DISCO_INFO,Strophe.NS.DISCO_ITEMS];
 }
-return _41;
+return _46;
 }
-}),new objj_method(sel_getUid("initWithService:JID:password:"),function(_44,_45,_46,_47,_48){
-with(_44){
-if(_44=objj_msgSend(_44,"initWithService:",_46)){
-_JID=_47;
-_password=_48;
-}
-return _44;
-}
-}),new objj_method(sel_getUid("connect"),function(_49,_4a){
+}),new objj_method(sel_getUid("initWithService:JID:password:"),function(_49,_4a,_4b,_4c,_4d){
 with(_49){
+if(_49=objj_msgSend(_49,"initWithService:",_4b)){
+_JID=_4c;
+_password=_4d;
+}
+return _49;
+}
+}),new objj_method(sel_getUid("connect"),function(_4e,_4f){
+with(_4e){
 if(_currentStatus!==Strophe.Status.DISCONNECTED){
 return;
 }
-objj_msgSend(_49,"registerSelector:ofObject:withDict:",sel_getUid("_didReceivePing:"),_49,objj_msgSend(CPDictionary,"dictionaryWithObjectsAndKeys:","iq","name","get","type"));
-_connection.connect(objj_msgSend(_JID,"full"),_password,function(_4b,_4c){
-var _4d,_4e;
-_currentStatus=_4b;
-if(_4c){
+objj_msgSend(_4e,"registerSelector:ofObject:withDict:",sel_getUid("_didReceivePing:"),_4e,objj_msgSend(CPDictionary,"dictionaryWithObjectsAndKeys:","iq","name","get","type"));
+_connection.connect(objj_msgSend(_JID,"full"),_password,function(_50,_51){
+var _52,_53;
+_currentStatus=_50;
+if(_51){
+_currentStatus=Strophe.Status.DISCONNECTED;
 if(objj_msgSend(_delegate,"respondsToSelector:",sel_getUid("connection:errorCondition:"))){
-objj_msgSend(_delegate,"connection:errorCondition:",_49,_4c);
+objj_msgSend(_delegate,"connection:errorCondition:",_4e,_51);
 }
 }else{
-switch(_4b){
+switch(_50){
 case Strophe.Status.ERROR:
-_4d=sel_getUid("onStropheError:");
-_4e=TNStropheConnectionStatusError;
+_52=sel_getUid("onStropheError:");
+_53=TNStropheConnectionStatusError;
 break;
 case Strophe.Status.CONNECTING:
-_4d=sel_getUid("onStropheConnecting:");
-_4e=TNStropheConnectionStatusConnecting;
+_52=sel_getUid("onStropheConnecting:");
+_53=TNStropheConnectionStatusConnecting;
+_giveUpTimer=objj_msgSend(CPTimer,"scheduledTimerWithTimeInterval:callback:repeats:",_giveupTimeout,function(_54){
+_currentStatus=Strophe.Status.DISCONNECTED;
+_giveUpTimer=nil;
+_connection=nil;
+_connection=new Strophe.Connection(_boshService);
+if((_currentStatus===Strophe.Status.CONNECTING)&&(objj_msgSend(_delegate,"respondsToSelector:",sel_getUid("connection:errorCondition:")))){
+objj_msgSend(_delegate,"connection:errorCondition:",_4e,"Cannot connect");
+}
+},NO);
 break;
 case Strophe.Status.CONNFAIL:
-_4d=sel_getUid("onStropheConnectFail:");
-_4e=TNStropheConnectionStatusConnectionFailure;
+_52=sel_getUid("onStropheConnectFail:");
+_53=TNStropheConnectionStatusConnectionFailure;
 break;
 case Strophe.Status.AUTHENTICATING:
-_4d=sel_getUid("onStropheAuthenticating:");
-_4e=TNStropheConnectionStatusAuthenticating;
+_52=sel_getUid("onStropheAuthenticating:");
+_53=TNStropheConnectionStatusAuthenticating;
 break;
 case Strophe.Status.AUTHFAIL:
-_4d=sel_getUid("onStropheAuthFail:");
-_4e=TNStropheConnectionStatusAuthFailure;
+_52=sel_getUid("onStropheAuthFail:");
+_53=TNStropheConnectionStatusAuthFailure;
 break;
 case Strophe.Status.DISCONNECTING:
-_4d=sel_getUid("onStropheDisconnecting:");
-_4e=TNStropheConnectionStatusDisconnecting;
+_52=sel_getUid("onStropheDisconnecting:");
+_53=TNStropheConnectionStatusDisconnecting;
 break;
 case Strophe.Status.DISCONNECTED:
-_4d=sel_getUid("onStropheDisconnected:");
-_4e=TNStropheConnectionStatusDisconnected;
+_52=sel_getUid("onStropheDisconnected:");
+_53=TNStropheConnectionStatusDisconnected;
 _connected=NO;
 break;
 case Strophe.Status.CONNECTED:
 _connection.send($pres().tree());
-objj_msgSend(_49,"sendCAPS");
-_4d=sel_getUid("onStropheConnected:");
-_4e=TNStropheConnectionStatusConnected;
+objj_msgSend(_4e,"sendCAPS");
+_52=sel_getUid("onStropheConnected:");
+_53=TNStropheConnectionStatusConnected;
 _connected=YES;
+if(_giveUpTimer){
+objj_msgSend(_giveUpTimer,"invalidate");
+}
 break;
 }
 }
-if(objj_msgSend(_delegate,"respondsToSelector:",_4d)){
-objj_msgSend(_delegate,"performSelector:withObject:",_4d,_49);
+if(objj_msgSend(_delegate,"respondsToSelector:",_52)){
+objj_msgSend(_delegate,"performSelector:withObject:",_52,_4e);
 }
-objj_msgSend(objj_msgSend(CPNotificationCenter,"defaultCenter"),"postNotificationName:object:",_4e,_49);
+objj_msgSend(objj_msgSend(CPNotificationCenter,"defaultCenter"),"postNotificationName:object:",_53,_4e);
 },_connectionTimeout,_maxConnections);
 }
-}),new objj_method(sel_getUid("disconnect"),function(_4f,_50){
-with(_4f){
+}),new objj_method(sel_getUid("disconnect"),function(_55,_56){
+with(_55){
 if(_currentStatus!==Strophe.Status.CONNECTED){
 return;
 }
-objj_msgSend(objj_msgSend(CPNotificationCenter,"defaultCenter"),"postNotificationName:object:",TNStropheConnectionStatusWillDisconnect,_4f);
+objj_msgSend(objj_msgSend(CPNotificationCenter,"defaultCenter"),"postNotificationName:object:",TNStropheConnectionStatusWillDisconnect,_55);
 _connection.disconnect();
 }
-}),new objj_method(sel_getUid("reset"),function(_51,_52){
-with(_51){
+}),new objj_method(sel_getUid("reset"),function(_57,_58){
+with(_57){
 if(_connection){
 _connection.reset();
 }
 }
-}),new objj_method(sel_getUid("pause"),function(_53,_54){
-with(_53){
+}),new objj_method(sel_getUid("pause"),function(_59,_5a){
+with(_59){
 if(_connection){
 _connection.pause();
 }
 }
-}),new objj_method(sel_getUid("resume"),function(_55,_56){
-with(_55){
+}),new objj_method(sel_getUid("resume"),function(_5b,_5c){
+with(_5b){
 if(_connection){
 _connection.pause();
 }
 }
-}),new objj_method(sel_getUid("flush"),function(_57,_58){
-with(_57){
+}),new objj_method(sel_getUid("flush"),function(_5d,_5e){
+with(_5d){
 _connection.flush();
 }
-}),new objj_method(sel_getUid("_didReceivePing:"),function(_59,_5a,_5b){
-with(_59){
-if(objj_msgSend(_5b,"containsChildrenWithName:","ping")&&objj_msgSend(objj_msgSend(_5b,"firstChildWithName:","ping"),"namespace")==Strophe.NS.PING){
+}),new objj_method(sel_getUid("_didReceivePing:"),function(_5f,_60,_61){
+with(_5f){
+if(objj_msgSend(_61,"containsChildrenWithName:","ping")&&objj_msgSend(objj_msgSend(_61,"firstChildWithName:","ping"),"namespace")==Strophe.NS.PING){
 CPLog.debug("Ping received. Sending pong.");
-objj_msgSend(_59,"send:",objj_msgSend(TNStropheStanza,"iqWithAttributes:",{"to":objj_msgSend(objj_msgSend(_5b,"from"),"bare"),"id":objj_msgSend(_5b,"ID"),"type":"result"}));
+objj_msgSend(_5f,"send:",objj_msgSend(TNStropheStanza,"iqWithAttributes:",{"to":objj_msgSend(objj_msgSend(_61,"from"),"bare"),"id":objj_msgSend(_61,"ID"),"type":"result"}));
 }
 return YES;
 }
-}),new objj_method(sel_getUid("addFeature:"),function(_5c,_5d,_5e){
-with(_5c){
-objj_msgSend(_features,"addObject:",_5e);
-}
-}),new objj_method(sel_getUid("removeFeature:"),function(_5f,_60,_61){
-with(_5f){
-objj_msgSend(_features,"removeObjectIdenticalTo:",_61);
-}
-}),new objj_method(sel_getUid("_clientVer"),function(_62,_63){
+}),new objj_method(sel_getUid("addFeature:"),function(_62,_63,_64){
 with(_62){
+objj_msgSend(_features,"addObject:",_64);
+}
+}),new objj_method(sel_getUid("removeFeature:"),function(_65,_66,_67){
+with(_65){
+objj_msgSend(_features,"removeObjectIdenticalTo:",_67);
+}
+}),new objj_method(sel_getUid("_clientVer"),function(_68,_69){
+with(_68){
 return SHA1.b64_sha1(_features.join());
 }
-}),new objj_method(sel_getUid("sendCAPS"),function(_64,_65){
-with(_64){
-var _66=objj_msgSend(TNStropheStanza,"presence");
-objj_msgSend(_66,"addChildWithName:andAttributes:","c",{"xmlns":Strophe.NS.CAPS,"node":_clientNode,"hash":"sha-1","ver":objj_msgSend(_64,"_clientVer")});
-objj_msgSend(_64,"registerSelector:ofObject:withDict:",sel_getUid("handleFeaturesDisco:"),_64,objj_msgSend(CPDictionary,"dictionaryWithObjectsAndKeys:","iq","name","get","type",Strophe.NS.DISCO_INFO,"namespace"));
-objj_msgSend(_64,"send:",_66);
+}),new objj_method(sel_getUid("sendCAPS"),function(_6a,_6b){
+with(_6a){
+var _6c=objj_msgSend(TNStropheStanza,"presence");
+objj_msgSend(_6c,"addChildWithName:andAttributes:","c",{"xmlns":Strophe.NS.CAPS,"node":_clientNode,"hash":"sha-1","ver":objj_msgSend(_6a,"_clientVer")});
+objj_msgSend(_6a,"registerSelector:ofObject:withDict:",sel_getUid("handleFeaturesDisco:"),_6a,objj_msgSend(CPDictionary,"dictionaryWithObjectsAndKeys:","iq","name","get","type",Strophe.NS.DISCO_INFO,"namespace"));
+objj_msgSend(_6a,"send:",_6c);
 }
-}),new objj_method(sel_getUid("handleFeaturesDisco:"),function(_67,_68,_69){
-with(_67){
-var _6a=objj_msgSend(TNStropheStanza,"iqWithAttributes:",{"id":objj_msgSend(_67,"getUniqueId"),"type":"result"});
-objj_msgSend(_6a,"setTo:",objj_msgSend(_69,"from"));
-objj_msgSend(_6a,"addChildWithName:andAttributes:","query",{"xmlns":Strophe.NS.DISCO_INFO,"node":(_clientNode+"#"+objj_msgSend(_67,"_clientVer"))});
-objj_msgSend(_6a,"addChildWithName:andAttributes:","identity",{"category":_identityCategory,"name":_identityName,"type":_identityType});
-objj_msgSend(_6a,"up");
+}),new objj_method(sel_getUid("handleFeaturesDisco:"),function(_6d,_6e,_6f){
+with(_6d){
+var _70=objj_msgSend(TNStropheStanza,"iqWithAttributes:",{"id":objj_msgSend(_6d,"getUniqueId"),"type":"result"});
+objj_msgSend(_70,"setTo:",objj_msgSend(_6f,"from"));
+objj_msgSend(_70,"addChildWithName:andAttributes:","query",{"xmlns":Strophe.NS.DISCO_INFO,"node":(_clientNode+"#"+objj_msgSend(_6d,"_clientVer"))});
+objj_msgSend(_70,"addChildWithName:andAttributes:","identity",{"category":_identityCategory,"name":_identityName,"type":_identityType});
+objj_msgSend(_70,"up");
 for(var i=0;i<objj_msgSend(_features,"count");i++){
-objj_msgSend(_6a,"addChildWithName:andAttributes:","feature",{"var":objj_msgSend(_features,"objectAtIndex:",i)});
-objj_msgSend(_6a,"up");
+objj_msgSend(_70,"addChildWithName:andAttributes:","feature",{"var":objj_msgSend(_features,"objectAtIndex:",i)});
+objj_msgSend(_70,"up");
 }
-objj_msgSend(_67,"send:",_6a);
+objj_msgSend(_6d,"send:",_70);
 return YES;
 }
-}),new objj_method(sel_getUid("send:"),function(_6b,_6c,_6d){
-with(_6b){
+}),new objj_method(sel_getUid("send:"),function(_71,_72,_73){
+with(_71){
 if(_currentStatus==Strophe.Status.CONNECTED){
-objj_msgSend(objj_msgSend(CPRunLoop,"currentRunLoop"),"performSelector:target:argument:order:modes:",sel_getUid("_performSend:"),_6b,_6d,0,[CPDefaultRunLoopMode]);
+objj_msgSend(objj_msgSend(CPRunLoop,"currentRunLoop"),"performSelector:target:argument:order:modes:",sel_getUid("_performSend:"),_71,_73,0,[CPDefaultRunLoopMode]);
 }
 }
-}),new objj_method(sel_getUid("_performSend:"),function(_6e,_6f,_70){
-with(_6e){
+}),new objj_method(sel_getUid("_performSend:"),function(_74,_75,_76){
+with(_74){
 if(_currentStatus==Strophe.Status.CONNECTED){
 CPLog.trace("StropheCappuccino Stanza Send:");
-CPLog.trace(_70);
-_connection.send(objj_msgSend(_70,"tree"));
-objj_msgSend(_6e,"flush");
+CPLog.trace(_76);
+_connection.send(objj_msgSend(_76,"tree"));
+objj_msgSend(_74,"flush");
 }
 }
-}),new objj_method(sel_getUid("publishPEPPayload:toNode:"),function(_71,_72,_73,_74){
-with(_71){
-var uid=objj_msgSend(_71,"getUniqueId"),_75=objj_msgSend(TNStropheStanza,"iqWithAttributes:",{"type":"set","id":uid}),_76=objj_msgSend(CPDictionary,"dictionaryWithObject:forKey:",uid,"id");
-objj_msgSend(_75,"addChildWithName:andAttributes:","pubsub",{"xmlns":Strophe.NS.PUBSUB});
-objj_msgSend(_75,"addChildWithName:andAttributes:","publish",{"node":_74});
-objj_msgSend(_75,"addChildWithName:","item");
-objj_msgSend(_75,"addNode:",_73);
-objj_msgSend(_71,"registerSelector:ofObject:withDict:",sel_getUid("_didPublishPEP:"),_71,_76);
-objj_msgSend(_71,"send:",_75);
-}
-}),new objj_method(sel_getUid("_didPublishPEP:"),function(_77,_78,_79){
+}),new objj_method(sel_getUid("publishPEPPayload:toNode:"),function(_77,_78,_79,_7a){
 with(_77){
-if(objj_msgSend(_79,"type")=="result"){
+var uid=objj_msgSend(_77,"getUniqueId"),_7b=objj_msgSend(TNStropheStanza,"iqWithAttributes:",{"type":"set","id":uid}),_7c=objj_msgSend(CPDictionary,"dictionaryWithObject:forKey:",uid,"id");
+objj_msgSend(_7b,"addChildWithName:andAttributes:","pubsub",{"xmlns":Strophe.NS.PUBSUB});
+objj_msgSend(_7b,"addChildWithName:andAttributes:","publish",{"node":_7a});
+objj_msgSend(_7b,"addChildWithName:","item");
+objj_msgSend(_7b,"addNode:",_79);
+objj_msgSend(_77,"registerSelector:ofObject:withDict:",sel_getUid("_didPublishPEP:"),_77,_7c);
+objj_msgSend(_77,"send:",_7b);
+}
+}),new objj_method(sel_getUid("_didPublishPEP:"),function(_7d,_7e,_7f){
+with(_7d){
+if(objj_msgSend(_7f,"type")=="result"){
 CPLog.debug("Publish succeeded!");
 }else{
 CPLog.error("Cannot publish the pubsub item in node with name: "+_nodeName);
 }
 return NO;
 }
-}),new objj_method(sel_getUid("getUniqueId"),function(_7a,_7b){
-with(_7a){
-return objj_msgSend(_7a,"getUniqueIdWithSuffix:",null);
+}),new objj_method(sel_getUid("getUniqueId"),function(_80,_81){
+with(_80){
+return objj_msgSend(_80,"getUniqueIdWithSuffix:",null);
 }
-}),new objj_method(sel_getUid("getUniqueIdWithSuffix:"),function(_7c,_7d,_7e){
-with(_7c){
-return _connection.getUniqueId(_7e);
+}),new objj_method(sel_getUid("getUniqueIdWithSuffix:"),function(_82,_83,_84){
+with(_82){
+return _connection.getUniqueId(_84);
 }
-}),new objj_method(sel_getUid("registerSelector:ofObject:withDict:"),function(_7f,_80,_81,_82,_83){
-with(_7f){
-var _84=(objj_msgSend(objj_msgSend(_83,"valueForKey:","from"),"class")==CPString)?objj_msgSend(_83,"valueForKey:","from"):objj_msgSend(objj_msgSend(_83,"valueForKey:","from"),"stringValue"),_85=_connection.addHandler(function(_86){
-var _87=objj_msgSend(TNStropheStanza,"stanzaWithStanza:",_86);
-CPLog.trace("StropheCappuccino stanza received that trigger selector : "+objj_msgSend(_82,"class")+"."+_81);
-CPLog.trace(_87);
-return objj_msgSend(_82,"performSelector:withObject:",_81,_87);
-},objj_msgSend(_83,"valueForKey:","namespace"),objj_msgSend(_83,"valueForKey:","name"),objj_msgSend(_83,"valueForKey:","type"),objj_msgSend(_83,"valueForKey:","id"),_84,objj_msgSend(_83,"valueForKey:","options"));
-return _85;
+}),new objj_method(sel_getUid("registerSelector:ofObject:withDict:"),function(_85,_86,_87,_88,_89){
+with(_85){
+var _8a=(objj_msgSend(objj_msgSend(_89,"valueForKey:","from"),"class")==CPString)?objj_msgSend(_89,"valueForKey:","from"):objj_msgSend(objj_msgSend(_89,"valueForKey:","from"),"stringValue"),_8b=_connection.addHandler(function(_8c){
+var _8d=objj_msgSend(TNStropheStanza,"stanzaWithStanza:",_8c);
+CPLog.trace("StropheCappuccino stanza received that trigger selector : "+objj_msgSend(_88,"class")+"."+_87);
+CPLog.trace(_8d);
+return objj_msgSend(_88,"performSelector:withObject:",_87,_8d);
+},objj_msgSend(_89,"valueForKey:","namespace"),objj_msgSend(_89,"valueForKey:","name"),objj_msgSend(_89,"valueForKey:","type"),objj_msgSend(_89,"valueForKey:","id"),_8a,objj_msgSend(_89,"valueForKey:","options"));
+return _8b;
 }
-}),new objj_method(sel_getUid("registerSelector:ofObject:withDict:userInfo:"),function(_88,_89,_8a,_8b,_8c,_8d){
-with(_88){
-var _8e=(objj_msgSend(objj_msgSend(_8c,"valueForKey:","from"),"class")==CPString)?objj_msgSend(_8c,"valueForKey:","from"):objj_msgSend(objj_msgSend(_8c,"valueForKey:","from"),"stringValue"),_8f=_connection.addHandler(function(_90){
-var _91=objj_msgSend(TNStropheStanza,"stanzaWithStanza:",_90);
-CPLog.trace("StropheCappuccino stanza received that trigger selector : "+objj_msgSend(_8b,"class")+"."+_8a);
-CPLog.trace(_91);
-return objj_msgSend(_8b,"performSelector:withObject:withObject:",_8a,_91,_8d);
-},objj_msgSend(_8c,"valueForKey:","namespace"),objj_msgSend(_8c,"valueForKey:","name"),objj_msgSend(_8c,"valueForKey:","type"),objj_msgSend(_8c,"valueForKey:","id"),_8e,objj_msgSend(_8c,"valueForKey:","options"));
-return _8f;
+}),new objj_method(sel_getUid("registerSelector:ofObject:withDict:userInfo:"),function(_8e,_8f,_90,_91,_92,_93){
+with(_8e){
+var _94=(objj_msgSend(objj_msgSend(_92,"valueForKey:","from"),"class")==CPString)?objj_msgSend(_92,"valueForKey:","from"):objj_msgSend(objj_msgSend(_92,"valueForKey:","from"),"stringValue"),_95=_connection.addHandler(function(_96){
+var _97=objj_msgSend(TNStropheStanza,"stanzaWithStanza:",_96);
+CPLog.trace("StropheCappuccino stanza received that trigger selector : "+objj_msgSend(_91,"class")+"."+_90);
+CPLog.trace(_97);
+return objj_msgSend(_91,"performSelector:withObject:withObject:",_90,_97,_93);
+},objj_msgSend(_92,"valueForKey:","namespace"),objj_msgSend(_92,"valueForKey:","name"),objj_msgSend(_92,"valueForKey:","type"),objj_msgSend(_92,"valueForKey:","id"),_94,objj_msgSend(_92,"valueForKey:","options"));
+return _95;
 }
-}),new objj_method(sel_getUid("registerTimeoutSelector:ofObject:withDict:forTimeout:"),function(_92,_93,_94,_95,_96,_97){
-with(_92){
-var _98=(objj_msgSend(objj_msgSend(_96,"valueForKey:","from"),"class")==CPString)?objj_msgSend(_96,"valueForKey:","from"):objj_msgSend(objj_msgSend(_96,"valueForKey:","from"),"stringValue"),_99=_connection.addTimedHandler(_97,function(_9a){
-if(!_9a){
-CPLog.trace("StropheCappuccino stanza timeout that trigger selector : "+objj_msgSend(_95,"class")+"."+_94);
-return objj_msgSend(_95,"performSelector:",_94);
+}),new objj_method(sel_getUid("registerTimeoutSelector:ofObject:withDict:forTimeout:"),function(_98,_99,_9a,_9b,_9c,_9d){
+with(_98){
+var _9e=(objj_msgSend(objj_msgSend(_9c,"valueForKey:","from"),"class")==CPString)?objj_msgSend(_9c,"valueForKey:","from"):objj_msgSend(objj_msgSend(_9c,"valueForKey:","from"),"stringValue"),_9f=_connection.addTimedHandler(_9d,function(_a0){
+if(!_a0){
+CPLog.trace("StropheCappuccino stanza timeout that trigger selector : "+objj_msgSend(_9b,"class")+"."+_9a);
+return objj_msgSend(_9b,"performSelector:",_9a);
 }
 return NO;
-},objj_msgSend(_96,"valueForKey:","namespace"),objj_msgSend(_96,"valueForKey:","name"),objj_msgSend(_96,"valueForKey:","type"),objj_msgSend(_96,"valueForKey:","id"),_98,objj_msgSend(_96,"valueForKey:","options"));
-return _99;
+},objj_msgSend(_9c,"valueForKey:","namespace"),objj_msgSend(_9c,"valueForKey:","name"),objj_msgSend(_9c,"valueForKey:","type"),objj_msgSend(_9c,"valueForKey:","id"),_9e,objj_msgSend(_9c,"valueForKey:","options"));
+return _9f;
 }
-}),new objj_method(sel_getUid("deleteRegisteredSelector:"),function(_9b,_9c,_9d){
-with(_9b){
-_connection.deleteHandler(_9d);
-}
-}),new objj_method(sel_getUid("deleteRegisteredTimedSelector:"),function(_9e,_9f,_a0){
-with(_9e){
-_connection.deleteTimedHandler(_a0);
-}
-}),new objj_method(sel_getUid("rawInputRegisterSelector:ofObject:"),function(_a1,_a2,_a3,_a4){
+}),new objj_method(sel_getUid("deleteRegisteredSelector:"),function(_a1,_a2,_a3){
 with(_a1){
-_connection.xmlInput=function(_a5){
-objj_msgSend(_a4,"performSelector:withObject:",_a3,objj_msgSend(TNStropheStanza,"nodeWithXMLNode:",_a5));
+_connection.deleteHandler(_a3);
+}
+}),new objj_method(sel_getUid("deleteRegisteredTimedSelector:"),function(_a4,_a5,_a6){
+with(_a4){
+_connection.deleteTimedHandler(_a6);
+}
+}),new objj_method(sel_getUid("rawInputRegisterSelector:ofObject:"),function(_a7,_a8,_a9,_aa){
+with(_a7){
+_connection.xmlInput=function(_ab){
+objj_msgSend(_aa,"performSelector:withObject:",_a9,objj_msgSend(TNStropheStanza,"nodeWithXMLNode:",_ab));
 };
 }
-}),new objj_method(sel_getUid("rawOutputRegisterSelector:ofObject:"),function(_a6,_a7,_a8,_a9){
-with(_a6){
-_connection.xmlOutput=function(_aa){
-objj_msgSend(_a9,"performSelector:withObject:",_a8,objj_msgSend(TNStropheStanza,"nodeWithXMLNode:",_aa));
+}),new objj_method(sel_getUid("rawOutputRegisterSelector:ofObject:"),function(_ac,_ad,_ae,_af){
+with(_ac){
+_connection.xmlOutput=function(_b0){
+objj_msgSend(_af,"performSelector:withObject:",_ae,objj_msgSend(TNStropheStanza,"nodeWithXMLNode:",_b0));
 };
 }
 })]);
-class_addMethods(_2,[new objj_method(sel_getUid("addNamespaceWithName:value:"),function(_ab,_ac,_ad,_ae){
-with(_ab){
-Strophe.addNamespace(_ad,_ae);
+class_addMethods(_2,[new objj_method(sel_getUid("addNamespaceWithName:value:"),function(_b1,_b2,_b3,_b4){
+with(_b1){
+Strophe.addNamespace(_b3,_b4);
 }
-}),new objj_method(sel_getUid("connectionWithService:"),function(_af,_b0,_b1){
-with(_af){
-return objj_msgSend(objj_msgSend(TNStropheConnection,"alloc"),"initWithService:",_b1);
+}),new objj_method(sel_getUid("connectionWithService:"),function(_b5,_b6,_b7){
+with(_b5){
+return objj_msgSend(objj_msgSend(TNStropheConnection,"alloc"),"initWithService:",_b7);
 }
-}),new objj_method(sel_getUid("connectionWithService:JID:password:"),function(_b2,_b3,_b4,_b5,_b6){
-with(_b2){
-return objj_msgSend(objj_msgSend(TNStropheConnection,"alloc"),"initWithService:JID:password:",_b4,_b5,_b6);
+}),new objj_method(sel_getUid("connectionWithService:JID:password:"),function(_b8,_b9,_ba,_bb,_bc){
+with(_b8){
+return objj_msgSend(objj_msgSend(TNStropheConnection,"alloc"),"initWithService:JID:password:",_ba,_bb,_bc);
 }
 })]);
 var _1=objj_getClass("TNStropheConnection");
@@ -454,27 +476,27 @@ if(!_1){
 throw new SyntaxError("*** Could not find definition for class \"TNStropheConnection\"");
 }
 var _2=_1.isa;
-class_addMethods(_1,[new objj_method(sel_getUid("initWithCoder:"),function(_b7,_b8,_b9){
-with(_b7){
-_b7=objj_msgSendSuper({receiver:_b7,super_class:objj_getClass("TNStropheConnection").super_class},"initWithCoder:",_b9);
-if(_b7){
-_JID=objj_msgSend(_b9,"decodeObjectForKey:","_JID");
-_password=objj_msgSend(_b9,"decodeObjectForKey:","_password");
-_delegate=objj_msgSend(_b9,"decodeObjectForKey:","_delegate");
-_boshService=objj_msgSend(_b9,"decodeObjectForKey:","_boshService");
-_connection=objj_msgSend(_b9,"decodeObjectForKey:","_connection");
-_audioTagReceive=objj_msgSend(_b9,"decodeObjectForKey:","_audioTagReceive");
+class_addMethods(_1,[new objj_method(sel_getUid("initWithCoder:"),function(_bd,_be,_bf){
+with(_bd){
+_bd=objj_msgSendSuper({receiver:_bd,super_class:objj_getClass("TNStropheConnection").super_class},"initWithCoder:",_bf);
+if(_bd){
+_JID=objj_msgSend(_bf,"decodeObjectForKey:","_JID");
+_password=objj_msgSend(_bf,"decodeObjectForKey:","_password");
+_delegate=objj_msgSend(_bf,"decodeObjectForKey:","_delegate");
+_boshService=objj_msgSend(_bf,"decodeObjectForKey:","_boshService");
+_connection=objj_msgSend(_bf,"decodeObjectForKey:","_connection");
+_audioTagReceive=objj_msgSend(_bf,"decodeObjectForKey:","_audioTagReceive");
 }
-return _b7;
+return _bd;
 }
-}),new objj_method(sel_getUid("encodeWithCoder:"),function(_ba,_bb,_bc){
-with(_ba){
-objj_msgSend(_bc,"encodeObject:forKey:",_JID,"_JID");
-objj_msgSend(_bc,"encodeObject:forKey:",_password,"_password");
-objj_msgSend(_bc,"encodeObject:forKey:",_boshService,"_boshService");
-objj_msgSend(_bc,"encodeObject:forKey:",_connection,"_connection");
-objj_msgSend(_bc,"encodeObject:forKey:",_registeredHandlerDict,"_registeredHandlerDict");
-objj_msgSend(_bc,"encodeObject:forKey:",_audioTagReceive,"_audioTagReceive");
+}),new objj_method(sel_getUid("encodeWithCoder:"),function(_c0,_c1,_c2){
+with(_c0){
+objj_msgSend(_c2,"encodeObject:forKey:",_JID,"_JID");
+objj_msgSend(_c2,"encodeObject:forKey:",_password,"_password");
+objj_msgSend(_c2,"encodeObject:forKey:",_boshService,"_boshService");
+objj_msgSend(_c2,"encodeObject:forKey:",_connection,"_connection");
+objj_msgSend(_c2,"encodeObject:forKey:",_registeredHandlerDict,"_registeredHandlerDict");
+objj_msgSend(_c2,"encodeObject:forKey:",_audioTagReceive,"_audioTagReceive");
 }
 })]);
 p;18;TNStropheContact.jt;19826;@STATIC;1.0;I;23;Foundation/Foundation.ji;14;TNStropheJID.ji;16;TNStropheGroup.ji;21;TNStropheConnection.ji;15;TNBase64Image.ji;18;TNStropheGlobals.jt;19669;
