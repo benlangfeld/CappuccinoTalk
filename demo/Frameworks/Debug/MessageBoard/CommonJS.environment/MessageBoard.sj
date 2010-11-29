@@ -92,7 +92,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithFrame:author:su
 },["void"])]);
 }
 
-p;13;TNStackView.jt;4590;@STATIC;1.0;I;23;Foundation/Foundation.jI;15;AppKit/AppKit.jt;4523;objj_executeFile("Foundation/Foundation.j", NO);
+p;13;TNStackView.jt;4578;@STATIC;1.0;I;23;Foundation/Foundation.jI;15;AppKit/AppKit.jt;4511;objj_executeFile("Foundation/Foundation.j", NO);
 objj_executeFile("AppKit/AppKit.j", NO);
 {var the_class = objj_allocateClassPair(CPView, "TNStackView"),
 meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_dataSource"), new objj_ivar("_padding"), new objj_ivar("_reversed"), new objj_ivar("_stackedViews")]);
@@ -153,11 +153,11 @@ _reversed = newValue;
     if (lastStackedView)
     {
         position = objj_msgSend(lastStackedView, "frame");
-        position.origin.y = position.origin.y + position.size.height + _padding;
+        position.origin.y = CPRectGetMaxY(position) + _padding;
         position.origin.x = _padding;
     }
     else
-        position = CGRectMake(_padding, _padding, objj_msgSend(self, "bounds").size.width - (_padding * 2), 0);
+        position = CGRectMake(_padding, _padding, CPRectGetWidth(objj_msgSend(self, "bounds")) - (_padding * 2), 0);
     return position
 }
 },["CPRect"]), new objj_method(sel_getUid("reload"), function $TNStackView__reload(self, _cmd)

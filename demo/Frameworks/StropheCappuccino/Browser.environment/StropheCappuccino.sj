@@ -1306,7 +1306,7 @@ objj_msgSend(_55,"encodeObject:forKey:",_resource,"_resource");
 }
 }
 })]);
-p;17;TNStropheRoster.jt;12516;@STATIC;1.0;I;23;Foundation/Foundation.ji;14;TNStropheJID.ji;21;TNStropheRosterBase.jt;12423;
+p;17;TNStropheRoster.jt;12518;@STATIC;1.0;I;23;Foundation/Foundation.ji;14;TNStropheJID.ji;21;TNStropheRosterBase.jt;12425;
 objj_executeFile("Foundation/Foundation.j",NO);
 objj_executeFile("TNStropheJID.j",YES);
 objj_executeFile("TNStropheRosterBase.j",YES);
@@ -1409,7 +1409,7 @@ if(_29){
 objj_msgSend(_contacts,"addObject:",_2a);
 var _2b=objj_msgSend(_20,"pendingPresenceForJID:",_24);
 for(var j=0;j<objj_msgSend(_2b,"count");j++){
-objj_msgSend(_2a,"_didReceiveStatus:",objj_msgSend(_2b,"objectAtIndex:",j));
+objj_msgSend(_2a,"_didReceivePresence:",objj_msgSend(_2b,"objectAtIndex:",j));
 }
 objj_msgSend(_2a,"getMessages");
 if(_23){
