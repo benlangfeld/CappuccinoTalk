@@ -156,6 +156,11 @@ RosterViewDragType = @"RosterViewDragType";
            selector:@selector(reload)
                name:TNStropheRosterRemovedGroupNotification
              object:nil];
+    [[CPNotificationCenter defaultCenter]
+        addObserver:self
+           selector:@selector(reload)
+               name:TNStropheRosterPushNotification
+             object:nil];
 }
 
 - (void)setupStoredAccounts

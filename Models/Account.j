@@ -29,15 +29,13 @@ ConnectionStatusConnected       = @"Connected";
 ConnectionStatusConnecting      = @"Connecting";
 ConnectionStatusDisconnected    = @"Disconnected";
 
-AccountWasCreatedNotification                   = @"AccountWasCreatedNotification";
-AccountWasAddedNotification                     = @"AccountWasAddedNotification";
-AccountWasEditedNotification                    = @"AccountWasEditedNotification";
-AccountWasDeletedNotification                   = @"AccountWasDeletedNotification";
-AccountConnectionStatusDidChangeNotification    = @"AccountConnectionStatusDidChangeNotification";
+AccountWasCreatedNotification   = @"AccountWasCreatedNotification";
+AccountWasAddedNotification     = @"AccountWasAddedNotification";
+AccountWasEditedNotification    = @"AccountWasEditedNotification";
+AccountWasDeletedNotification   = @"AccountWasDeletedNotification";
 
-@implementation Account : TNStropheConnection
+@implementation Account : TNStropheClient
 {
-    TNStropheRoster         roster                  @accessors;
     BOOL                    enabled                 @accessors(property=isEnabled);
 
     CPWindowController      setStatusController;
@@ -55,10 +53,12 @@ AccountConnectionStatusDidChangeNotification    = @"AccountConnectionStatusDidCh
     if (self = [super initWithService:BOSHService JID:aJID password:aPassword])
     {
         enabled = isEnabled;
-        roster  = [TNStropheRoster rosterWithConnection:self];
-        [self setDelegate:self];
-        [roster setDelegate:self];
         [[CPNotificationCenter defaultCenter] postNotificationName:AccountWasCreatedNotification object:self];
+        [[CPNotificationCenter defaultCenter]
+            addObserver:self
+               selector:@selector(whenStropheConnected:)
+                   name:TNStropheConnectionStatusConnected
+                 object:[self connection]];
     }
     return self;
 }
@@ -68,65 +68,17 @@ AccountConnectionStatusDidChangeNotification    = @"AccountConnectionStatusDidCh
     return [[self JID] full];
 }
 
-- (BOOL)onStropheConnecting:(id)aConnection
+- (void)whenStropheConnected:(id)aConnection
 {
-    CPLog.debug("XMPP: Connecting");
-    [[CPNotificationCenter defaultCenter] postNotificationName:AccountConnectionStatusDidChangeNotification object:self];
-}
-
-- (BOOL)onStropheAuthenticating:(id)aConnection
-{
-    CPLog.debug("XMPP: Authenticating");
-    [[CPNotificationCenter defaultCenter] postNotificationName:AccountConnectionStatusDidChangeNotification object:self];
-}
-
-- (BOOL)onStropheAuthFail:(id)aConnection
-{
-    CPLog.warn("XMPP: Authentication Failed");
-    [[CPNotificationCenter defaultCenter] postNotificationName:AccountConnectionStatusDidChangeNotification object:self];
-}
-
-- (BOOL)onStropheConnected:(id)aConnection
-{
-    CPLog.info("XMPP: Connected");
     [[CPNotificationCenter defaultCenter]
         removeObserver:self
                   name:TNStropheConnectionStatusDisconnected
                 object:nil];
-    [roster getRoster];
-    [[CPNotificationCenter defaultCenter] postNotificationName:AccountConnectionStatusDidChangeNotification object:self];
-}
-
-- (BOOL)onStropheConnectFail:(id)aConnection
-{
-    CPLog.warn("XMPP: Connection Failed");
-    [roster clear];
-    [[CPNotificationCenter defaultCenter] postNotificationName:AccountConnectionStatusDidChangeNotification object:self];
-}
-
-- (BOOL)onStropheDisconnecting:(id)aConnection
-{
-    CPLog.debug("XMPP: Disconnecting");
-    [[CPNotificationCenter defaultCenter] postNotificationName:AccountConnectionStatusDidChangeNotification object:self];
-}
-
-- (BOOL)onStropheDisconnected:(id)aConnection
-{
-    CPLog.debug("XMPP: Disconnected");
-    [roster clear];
-    [[CPNotificationCenter defaultCenter] postNotificationName:AccountConnectionStatusDidChangeNotification object:self];
-}
-
-- (BOOL)onStropheError:(id)aConnection
-{
-    CPLog.error("XMPP: Error");
-    [roster clear];
-    [[CPNotificationCenter defaultCenter] postNotificationName:AccountConnectionStatusDidChangeNotification object:self];
 }
 
 - (CPString)connectionStatus
 {
-    if ([self isConnected])
+    if ([[self connection] isConnected])
         return ConnectionStatusConnected;
 
     return ConnectionStatusDisconnected;

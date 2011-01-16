@@ -69,7 +69,7 @@ var SharedController = nil;
         [[CPNotificationCenter defaultCenter]
             addObserver:self
                selector:@selector(accountsWereUpdated:)
-                   name:AccountConnectionStatusDidChangeNotification
+                   name:TNStropheConnectionStatusDidChangeNotification
                  object:nil];
     }
     return self;
